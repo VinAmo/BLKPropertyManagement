@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,16 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    ViewController *rootViewController = [[ViewController alloc] init];
+    _navigationController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
+    
+    _window = [[UIWindow alloc] init];
+    _window.frame = [[UIScreen mainScreen] bounds];
+    _window.rootViewController = _navigationController;
+    [_window makeKeyAndVisible];
+    
+    _servicePort = @"http://99b82737.ngrok.io/community_business";
+    
     return YES;
 }
 
