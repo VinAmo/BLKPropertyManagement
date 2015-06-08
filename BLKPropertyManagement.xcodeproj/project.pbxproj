@@ -8,11 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		3B95257FD5F86A6C20301E24 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4895CB57B4AD1059AC8CB85D /* libPods.a */; };
+		F4567C551B2569A5004F1D52 /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4567C541B2569A5004F1D52 /* AccountViewController.m */; };
 		F46C2A401B212BE500453058 /* CommunityBulletin.m in Sources */ = {isa = PBXBuildFile; fileRef = F46C2A3F1B212BE500453058 /* CommunityBulletin.m */; };
 		F4764A7F1B203EAE00BAABE0 /* AddNoticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4764A7E1B203EAE00BAABE0 /* AddNoticeViewController.m */; };
 		F4764A821B203F2600BAABE0 /* NoticeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4764A811B203F2600BAABE0 /* NoticeDetailViewController.m */; };
 		F4764A851B203F3C00BAABE0 /* RepairReportDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4764A841B203F3C00BAABE0 /* RepairReportDetailViewController.m */; };
 		F4764A881B203F8C00BAABE0 /* FeedbackDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4764A871B203F8C00BAABE0 /* FeedbackDetailViewController.m */; };
+		F47F73721B227D5700224B40 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F47F73711B227D5700224B40 /* SignInViewController.m */; };
 		F4C725781B1FE4950005A8C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C725771B1FE4950005A8C7 /* main.m */; };
 		F4C7257B1B1FE4950005A8C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C7257A1B1FE4950005A8C7 /* AppDelegate.m */; };
 		F4C7257E1B1FE4950005A8C7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C7257D1B1FE4950005A8C7 /* ViewController.m */; };
@@ -39,6 +41,8 @@
 		4895CB57B4AD1059AC8CB85D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F6CF61AFF85E9E27D6FDEB0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7C960D82837CCB51723701AE /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		F4567C531B2569A5004F1D52 /* AccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
+		F4567C541B2569A5004F1D52 /* AccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
 		F46C2A3E1B212BE500453058 /* CommunityBulletin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunityBulletin.h; sourceTree = "<group>"; };
 		F46C2A3F1B212BE500453058 /* CommunityBulletin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunityBulletin.m; sourceTree = "<group>"; };
 		F4764A7D1B203EAE00BAABE0 /* AddNoticeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddNoticeViewController.h; sourceTree = "<group>"; };
@@ -49,6 +53,8 @@
 		F4764A841B203F3C00BAABE0 /* RepairReportDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepairReportDetailViewController.m; sourceTree = "<group>"; };
 		F4764A861B203F8C00BAABE0 /* FeedbackDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedbackDetailViewController.h; sourceTree = "<group>"; };
 		F4764A871B203F8C00BAABE0 /* FeedbackDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackDetailViewController.m; sourceTree = "<group>"; };
+		F47F73701B227D5700224B40 /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = "<group>"; };
+		F47F73711B227D5700224B40 /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = "<group>"; };
 		F4C725721B1FE4950005A8C7 /* BLKPropertyManagement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BLKPropertyManagement.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4C725761B1FE4950005A8C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4C725771B1FE4950005A8C7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -132,8 +138,12 @@
 			children = (
 				F4C725791B1FE4950005A8C7 /* AppDelegate.h */,
 				F4C7257A1B1FE4950005A8C7 /* AppDelegate.m */,
+				F47F73701B227D5700224B40 /* SignInViewController.h */,
+				F47F73711B227D5700224B40 /* SignInViewController.m */,
 				F4C7257C1B1FE4950005A8C7 /* ViewController.h */,
 				F4C7257D1B1FE4950005A8C7 /* ViewController.m */,
+				F4567C531B2569A5004F1D52 /* AccountViewController.h */,
+				F4567C541B2569A5004F1D52 /* AccountViewController.m */,
 				F4C7259B1B1FF5860005A8C7 /* CommunityBulletinViewController.h */,
 				F4C7259C1B1FF5860005A8C7 /* CommunityBulletinViewController.m */,
 				F4764A801B203F2600BAABE0 /* NoticeDetailViewController.h */,
@@ -321,8 +331,10 @@
 			files = (
 				F4764A821B203F2600BAABE0 /* NoticeDetailViewController.m in Sources */,
 				F4C7257E1B1FE4950005A8C7 /* ViewController.m in Sources */,
+				F4567C551B2569A5004F1D52 /* AccountViewController.m in Sources */,
 				F4C725A31B1FF5CF0005A8C7 /* MaintenanceManagementViewController.m in Sources */,
 				F4C7259D1B1FF5860005A8C7 /* CommunityBulletinViewController.m in Sources */,
+				F47F73721B227D5700224B40 /* SignInViewController.m in Sources */,
 				F4C725A61B1FF5F10005A8C7 /* FeedbackViewController.m in Sources */,
 				F4764A881B203F8C00BAABE0 /* FeedbackDetailViewController.m in Sources */,
 				F46C2A401B212BE500453058 /* CommunityBulletin.m in Sources */,

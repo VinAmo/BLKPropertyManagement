@@ -18,8 +18,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"发布公告";
-    UIBarButtonItem *publishBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_notice_publish"] style:UIBarButtonItemStyleDone target:self action:@selector(publish)];
-    self.navigationItem.rightBarButtonItem = publishBarButtonItem;
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_notice_publish"] style:UIBarButtonItemStyleDone target:self action:@selector(publish)];
     
     self.view = [[UIView alloc] init];
     self.view.frame = [[UIScreen mainScreen] bounds];

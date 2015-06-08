@@ -5,9 +5,9 @@
 //  Created by blk01 on 15/6/4.
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
-#import <AFNetworking.h>
-#import "AppDelegate.h"
+
 #import "ViewController.h"
+#import "AccountViewController.h"
 #import "CommunityBulletinViewController.h"
 #import "RepairReportManagementViewController.h"
 #import "MaintenanceManagementViewController.h"
@@ -22,9 +22,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    self.navigationItem.title = @"物业管理";
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.navigationItem.title = @"物业管理";
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"账户" style:UIBarButtonItemStylePlain target:self action:@selector(showAccountViewController)];
     
     UIButton *communityBulletinButton = [UIButton buttonWithType:UIButtonTypeCustom];
     communityBulletinButton.frame = CGRectMake(0, 0, 40, 40);
@@ -54,7 +56,11 @@
     [feedbackButton addTarget:self action:@selector(showFeedbackViewController) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:feedbackButton];
     
-    [self signIn];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"access"];
+}
+
+- (void)showAccountViewController {
+    [self.navigationController pushViewController:[[AccountViewController alloc] init] animated:YES];
 }
 
 - (void)showCommunityBulletinViewController {
@@ -71,49 +77,6 @@
 
 - (void)showFeedbackViewController {
     [self.navigationController pushViewController:[[FeedbackViewController alloc] init] animated:YES];
-}
-
-- (void)signIn {
-    NSData *userName = [@"super" dataUsingEncoding:NSUTF8StringEncoding];
-    NSString *encodedUserName = [userName base64EncodedStringWithOptions:0];
-    
-    NSData *userPassword = [@"888888" dataUsingEncoding:NSUTF8StringEncoding];
-    NSString *encodedUserPassord = [userPassword base64EncodedStringWithOptions:0];
-    
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"AppLogin/login.do"];
-    NSString *param = [NSString stringWithFormat:@"loginName=%@&loginPwd=%@", encodedUserName, encodedUserPassord];
-    
-//    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-//    NSDictionary *params = @{ @"loginName": encodedUserName, @"loginPwd": encodedUserPassord};
-//    [manager POST:urlStr parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSLog(@"JSON: %@", responseObject);
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Error: %@", error);
-//    }];
-    
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:urlStr]];
-    [request setHTTPMethod:@"POST"];
-    [request setHTTPBody:[param dataUsingEncoding:NSUTF8StringEncoding]];
-    
-//    NSData *response = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue new]
-                           completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-        NSError *error = nil;
-        NSDictionary *rootDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-        if (error) {
-            NSLog(@"Error parsing JSON: %@", error);
-        }
-        else {
-            NSLog(@"%@", rootDic);
-        }
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            // back to main thread
-            
-        });
-    }];
 }
 
 @end

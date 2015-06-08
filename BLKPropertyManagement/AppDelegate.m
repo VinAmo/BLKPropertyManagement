@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "ViewController.h"
+#import "SignInViewController.h"
 
 @interface AppDelegate ()
 
@@ -18,11 +19,21 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    ViewController *rootViewController = [[ViewController alloc] init];
-    _navigationController = [[UINavigationController alloc] initWithRootViewController:rootViewController];
     
     _window = [[UIWindow alloc] init];
     _window.frame = [[UIScreen mainScreen] bounds];
+    
+    ViewController *mainViewController = [[ViewController alloc] init];
+    SignInViewController *signInViewController = [[SignInViewController alloc] init];
+    
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"access"]) {
+        _navigationController = [[UINavigationController alloc] initWithRootViewController:mainViewController];
+    }
+    else {
+        _navigationController = [[UINavigationController alloc] initWithRootViewController:signInViewController];
+        [_navigationController setNavigationBarHidden:YES];
+    }
     _window.rootViewController = _navigationController;
     [_window makeKeyAndVisible];
     
