@@ -170,6 +170,7 @@
                                    dispatch_async(dispatch_get_main_queue(), ^{
                                        // back to main thread
                                        [self.navigationController pushViewController:[[ViewController alloc] init] animated:YES];
+                                       [self.navigationController setNavigationBarHidden:NO];
                                    });
                                }
                                else {
@@ -179,7 +180,7 @@
                                        [userDefaults setBool:NO forKey:@"access"];
                                        
                                        UIAlertView *alertView =  [[UIAlertView alloc] initWithTitle:@"登录失败"
-                                                                                            message:@"您输入的帐号密码有误"
+                                                                                            message:@"服务器已关闭或者您输入的帐号密码有误"
                                                                                            delegate:self cancelButtonTitle:@"确认"
                                                                                   otherButtonTitles:nil];
                                        [alertView show];

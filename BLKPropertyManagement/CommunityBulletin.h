@@ -10,6 +10,6 @@
 
 @interface CommunityBulletin : NSObject
 
-@property (strong, nonatomic) NSString *content;
+@property (strong, nonatomic) NSArray *notices;
 
 @end

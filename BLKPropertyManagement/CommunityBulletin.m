@@ -28,24 +28,26 @@
     NSString *rolePermissionPkno = [userDefaults stringForKey:@"rolePermissionPkno"];
     NSString *permissionsPkno = [userDefaults stringForKey:@"permissionsPkno"];
     NSString *userPkno = [userDefaults stringForKey:@"userPkno"];
+    NSString *cookieDomain = delegate.servicePort;
+    NSString *cookiePath = @"AppNotice/findNoticeBySearch.do";
     
     NSDictionary *properties_1 = [NSDictionary dictionaryWithObjectsAndKeys:
                                   @"rolePermissionPkno", NSHTTPCookieName,
                                   rolePermissionPkno, NSHTTPCookieValue,
-                                  "99b82737.ngrok.io", NSHTTPCookieDomain,
-                                  "/community_business", NSHTTPCookiePath,
+                                  cookieDomain, NSHTTPCookieDomain,
+                                  cookiePath, NSHTTPCookiePath,
                                   nil];
     NSDictionary *properties_2 = [NSDictionary dictionaryWithObjectsAndKeys:
                                   @"rolePermission", NSHTTPCookieName,
                                   permissionsPkno, NSHTTPCookieValue,
-                                  "99b82737.ngrok.io", NSHTTPCookieDomain,
-                                  "/community_business", NSHTTPCookiePath,
+                                  cookieDomain, NSHTTPCookieDomain,
+                                  cookiePath, NSHTTPCookiePath,
                                   nil];
     NSDictionary *properties_3 = [NSDictionary dictionaryWithObjectsAndKeys:
                                   @"userPkno", NSHTTPCookieName,
                                   userPkno, NSHTTPCookieValue,
-                                  "99b82737.ngrok.io", NSHTTPCookieDomain,
-                                  "/community_business", NSHTTPCookiePath,
+                                  cookieDomain, NSHTTPCookieDomain,
+                                  cookiePath, NSHTTPCookiePath,
                                   nil];
     
     NSHTTPCookie *cookie_1 = [NSHTTPCookie cookieWithProperties:properties_1];
@@ -56,11 +58,11 @@
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_2];
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_3];
     
-    [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSLog(@"New cookie :%@\n", obj);
-    }];
+//    [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//        NSLog(@"Cookie :%@\n", obj);
+//    }];
     
-    NSString *page = @"10";
+    NSString *page = [@1 stringValue];
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"AppNotice/findNoticeBySearch.do"];
     NSString *param = [NSString stringWithFormat:@"pagesize=10&page=%@&Category=小区公告&typeCode=1001", page];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
@@ -71,12 +73,12 @@
                                        queue:[NSOperationQueue new]
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
                                NSError *error = nil;
-                               NSDictionary *rootDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                               NSArray *rootArray = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
                                if (error) {
                                    NSLog(@"Error parsing JSON: %@", error);
                                 }
                                else {
-                                   NSLog(@"%@", rootDic);
+                                   self.notices = rootArray;
                                }
                             }];
 }

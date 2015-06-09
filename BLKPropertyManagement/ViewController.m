@@ -56,7 +56,7 @@
     [feedbackButton addTarget:self action:@selector(showFeedbackViewController) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:feedbackButton];
     
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"access"];
+//    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"access"];
 }
 
 - (void)showAccountViewController {

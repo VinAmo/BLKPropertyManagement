@@ -98,8 +98,10 @@
     CommunityBulletinTVC *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {
         cell = [[CommunityBulletinTVC alloc] init];
-        cell.titleLabel.text = @"停水通知";
-        cell.contentLabel.text = self.communityBulletin.content;
+        NSDictionary *notice = self.communityBulletin.notices[0];
+        NSLog(@"%@", notice);
+//        cell.titleLabel.text = [notice objectForKey:@"title"];
+//        cell.contentLabel.text = [notice objectForKey:@"content"];
     }
     return cell;
 }
