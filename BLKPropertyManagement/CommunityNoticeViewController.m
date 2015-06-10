@@ -1,17 +1,17 @@
 //
-//  CommunityBulletinViewController.m
+//  CommunityNoticeViewController.m
 //  BLKPropertyManagement
 //
-//  Created by blk01 on 15/6/4.
+//  Created by blk01 on 15/6/10.
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
-#import "CommunityBulletinViewController.h"
+#import "HTTPDataFetcher.h"
+#import "CommunityNoticeViewController.h"
 #import "NoticeDetailViewController.h"
 #import "AddNoticeViewController.h"
-#import "CommunityBulletin.h"
 
-@interface CommunityBulletinTVC : UITableViewCell
+@interface CommunityNoticeTVC : UITableViewCell
 
 @property (strong, nonatomic) UIView *headerContainerView;
 @property (strong, nonatomic) UILabel *headerLeftLabel;
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation CommunityBulletinTVC
+@implementation CommunityNoticeTVC
 
 - (instancetype)init
 {
@@ -46,10 +46,14 @@
         [self addSubview:_titleLabel];
         
         _contentLabel = [[UILabel alloc] init];
+        _contentLabel.backgroundColor = [UIColor lightGrayColor];
+        _contentLabel.numberOfLines = 0;
+        //        _contentLabel.lineBreakMode = NSLineBreakByWordWrapping;
         [self addSubview:_contentLabel];
     }
     return self;
 }
+
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -57,17 +61,19 @@
     self.headerContainerView.frame = CGRectMake(20, 0, self.bounds.size.width - 20, self.bounds.size.height * 0.2);
     self.headerLeftLabel.frame = CGRectMake(0, 0, self.headerContainerView.bounds.size.width * 0.7, self.headerContainerView.bounds.size.height);
     self.headerRightLabel.frame = CGRectMake(CGRectGetMaxX(self.headerLeftLabel.frame), 0, self.headerContainerView.bounds.size.width * 0.3, self.headerContainerView.bounds.size.height);
-    self.titleLabel.frame = CGRectMake(20, CGRectGetMaxY(self.headerContainerView.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.3);
-    self.contentLabel.frame = CGRectMake(20, CGRectGetMaxY(self.titleLabel.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.5);
+    self.titleLabel.frame = CGRectMake(20, CGRectGetMaxY(self.headerContainerView.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.3);
+    self.contentLabel.frame = CGRectMake(20, CGRectGetMaxY(self.titleLabel.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.5);
 }
 
 @end
 
-@interface CommunityBulletinViewController () <UITableViewDataSource, UITableViewDelegate>
-@property (strong, nonatomic) CommunityBulletin *communityBulletin;
+@interface CommunityNoticeViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@property (strong, nonatomic) NSMutableArray *notices;
+
 @end
 
-@implementation CommunityBulletinViewController
+@implementation CommunityNoticeViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -83,11 +89,6 @@
     [self.view addSubview:tableView];
 }
 
-- (CommunityBulletin *)communityBulletin {
-    if (!_communityBulletin) _communityBulletin = [[CommunityBulletin alloc] init];
-    return _communityBulletin;
-}
-
 #pragma mark - table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -95,13 +96,22 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CommunityBulletinTVC *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    CommunityNoticeTVC *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {
-        cell = [[CommunityBulletinTVC alloc] init];
-        NSDictionary *notice = self.communityBulletin.notices[0];
-        NSLog(@"%@", notice);
-//        cell.titleLabel.text = [notice objectForKey:@"title"];
-//        cell.contentLabel.text = [notice objectForKey:@"content"];
+        cell = [[CommunityNoticeTVC alloc] init];
+        __weak typeof(cell) weakCell = cell;
+        
+        HTTPDataFetcher *fetcher = [[HTTPDataFetcher alloc] init];
+        [fetcher fetchCommunityNoticeMessages:^(id messages) {
+            if ([messages isKindOfClass:[NSArray class]]) {
+                NSDictionary *notice = messages[indexPath.item];
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    weakCell.titleLabel.text = [notice valueForKey:@"title"];
+                    weakCell.contentLabel.text = [notice valueForKey:@"content"];
+                    NSLog(@"%@ %@", weakCell.titleLabel.text, weakCell.contentLabel.text);
+                }];
+            }
+        } AtPage:1 WithSize:10];
     }
     return cell;
 }
@@ -128,5 +138,4 @@
 - (void)showAddNoticeViewController {
     [self.navigationController pushViewController:[[AddNoticeViewController alloc] init] animated:YES];
 }
-
 @end

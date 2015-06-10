@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
+#import "HTTPDataFetcher.h"
 #import "RepairReportManagementViewController.h"
 #import "RepairReportDetailViewController.h"
 
@@ -116,6 +117,23 @@
     RepairReportManagementTVC *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {
         cell = [[RepairReportManagementTVC alloc] init];
+        __weak typeof(cell) weakCell = cell;
+        
+        HTTPDataFetcher *fetcher = [[HTTPDataFetcher alloc] init];
+        [fetcher fetchRepairRoportMessages:^(id messages) {
+            if ([messages isKindOfClass:[NSDictionary class]]) {
+                NSArray *messagesArr = [messages valueForKey:@"Rows"];
+                NSDictionary *message = messagesArr[indexPath.item];
+                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                    weakCell.housingTypeLabel.text = [weakCell.housingTypeLabel.text stringByAppendingString:[message valueForKey:@"category"]];
+                    weakCell.buildingNumberLabel.text = [weakCell.buildingNumberLabel.text stringByAppendingString:[message valueForKey:@"houseAdd"]];
+                    weakCell.reporterLabel.text = [weakCell.reporterLabel.text stringByAppendingString:[message valueForKey:@"employeeName"]];
+                    weakCell.scheduleTimeLabel.text = [weakCell.scheduleTimeLabel.text stringByAppendingString:[message valueForKey:@"appointmentTime"]];
+                    weakCell.phoneNumberLabel.text = [weakCell.phoneNumberLabel.text stringByAppendingString:[message valueForKey:@"employeePhone"]];
+                    NSLog(@"%@", messagesArr);
+                }];
+            }
+        } AtPage:1 withSize:10];
     }
     return cell;
 }
