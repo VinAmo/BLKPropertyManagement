@@ -10,7 +10,7 @@
 #import "RepairReportManagementViewController.h"
 #import "RepairReportDetailViewController.h"
 
-@interface RepairReportManagementTVC : UITableViewCell
+@interface RepairReportManagementTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) UIView *headerContainerView;
 @property (strong, nonatomic) UILabel *headerLeftLabel;
@@ -25,7 +25,7 @@
 
 @end
 
-@implementation RepairReportManagementTVC
+@implementation RepairReportManagementTableViewCell
 
 - (instancetype)init
 {
@@ -91,6 +91,9 @@
 
 @interface RepairReportManagementViewController () <UITableViewDataSource, UITableViewDelegate>
 
+@property (assign, nonatomic) NSUInteger page;
+@property (assign, nonatomic) NSUInteger size;
+
 @end
 
 @implementation RepairReportManagementViewController
@@ -99,6 +102,9 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"报修管理";
+    
+    self.page = 0; // default
+    self.size = 10; // default
     
     UITableView *tableView = [[UITableView alloc] init];
     tableView.frame = self.view.bounds;
@@ -110,35 +116,59 @@
 #pragma mark - table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return 30;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RepairReportManagementTVC *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    RepairReportManagementTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {
-        cell = [[RepairReportManagementTVC alloc] init];
-        __weak typeof(cell) weakCell = cell;
+        cell = [[RepairReportManagementTableViewCell alloc] init];
         
-        HTTPDataFetcher *fetcher = [[HTTPDataFetcher alloc] init];
-        [fetcher fetchRepairRoportMessages:^(id messages) {
-            if ([messages isKindOfClass:[NSDictionary class]]) {
-                NSArray *messagesArr = [messages valueForKey:@"Rows"];
-                NSDictionary *message = messagesArr[indexPath.item];
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    weakCell.housingTypeLabel.text = [weakCell.housingTypeLabel.text stringByAppendingString:[message valueForKey:@"category"]];
-                    weakCell.buildingNumberLabel.text = [weakCell.buildingNumberLabel.text stringByAppendingString:[message valueForKey:@"houseAdd"]];
-                    weakCell.reporterLabel.text = [weakCell.reporterLabel.text stringByAppendingString:[message valueForKey:@"employeeName"]];
-                    weakCell.scheduleTimeLabel.text = [weakCell.scheduleTimeLabel.text stringByAppendingString:[message valueForKey:@"appointmentTime"]];
-                    weakCell.phoneNumberLabel.text = [weakCell.phoneNumberLabel.text stringByAppendingString:[message valueForKey:@"employeePhone"]];
-                    NSLog(@"%@", messagesArr);
-                }];
-            }
-        } AtPage:1 withSize:10];
+        if (indexPath.item > self.page * self.size) {
+            __weak typeof(cell) weakCell = cell;
+            [HTTPDataFetcher fetchRepairReportMessages:^(id messages) {
+                if ([messages isKindOfClass:[NSDictionary class]]) {
+                    NSArray *messagesArr = [messages valueForKey:@"Rows"];
+                    NSDictionary *message = messagesArr[indexPath.item];
+                    [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+                        weakCell.housingTypeLabel.text = [weakCell.housingTypeLabel.text stringByAppendingString:[message valueForKey:@"category"]];
+                        weakCell.buildingNumberLabel.text = [weakCell.buildingNumberLabel.text stringByAppendingString:[message valueForKey:@"houseAdd"]];
+                        weakCell.reporterLabel.text = [weakCell.reporterLabel.text stringByAppendingString:[message valueForKey:@"employeeName"]];
+                        weakCell.scheduleTimeLabel.text = [weakCell.scheduleTimeLabel.text stringByAppendingString:[message valueForKey:@"appointmentTime"]];
+                        weakCell.phoneNumberLabel.text = [weakCell.phoneNumberLabel.text stringByAppendingString:[message valueForKey:@"employeePhone"]];
+//                        [tableView reloadData];
+                    }];
+                }
+            } AtPage:++self.page WithSize:self.size];
+            NSAssert(self.page > 1, @"%lu %lu" , self.page, self.size);
+        }
     }
     return cell;
 }
 
 #pragma mark - table view delegate
+
+//- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    if (indexPath.item > self.page * self.size) {
+//        RepairReportManagementTableViewCell *subCell = (RepairReportManagementTableViewCell *)cell;
+//        
+//        __weak typeof(subCell) weakCell = subCell;
+//        [HTTPDataFetcher fetchRepairReportMessages:^(id messages) {
+//            if ([messages isKindOfClass:[NSDictionary class]]) {
+//                NSArray *messagesArr = [messages valueForKey:@"Rows"];
+//                NSDictionary *message = messagesArr[indexPath.item];
+//                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
+//                    weakCell.housingTypeLabel.text = [weakCell.housingTypeLabel.text stringByAppendingString:[message valueForKey:@"category"]];
+//                    weakCell.buildingNumberLabel.text = [weakCell.buildingNumberLabel.text stringByAppendingString:[message valueForKey:@"houseAdd"]];
+//                    weakCell.reporterLabel.text = [weakCell.reporterLabel.text stringByAppendingString:[message valueForKey:@"employeeName"]];
+//                    weakCell.scheduleTimeLabel.text = [weakCell.scheduleTimeLabel.text stringByAppendingString:[message valueForKey:@"appointmentTime"]];
+//                    weakCell.phoneNumberLabel.text = [weakCell.phoneNumberLabel.text stringByAppendingString:[message valueForKey:@"employeePhone"]];
+//                }];
+//            }
+//        } AtPage:++self.page WithSize:self.size];
+//        NSLog(@"%lu %lu", self.page, self.size);
+//    }
+//}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 200;

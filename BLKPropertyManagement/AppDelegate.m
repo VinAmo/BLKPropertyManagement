@@ -38,6 +38,7 @@
     [_window makeKeyAndVisible];
     
     _servicePort = @"http://99b82737.ngrok.io/community_business";
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES]; // try
 //    [self setCookies];
     
     return YES;

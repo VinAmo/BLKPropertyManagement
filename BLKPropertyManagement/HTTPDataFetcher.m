@@ -11,7 +11,7 @@
 
 @implementation HTTPDataFetcher
 
-- (void)fetchCommunityNoticeMessages:(void (^)(id))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size {
++ (void)fetchCommunityNoticeMessages:(void (^)(id))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size {
     //    [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
     //        NSLog(@"Cookie :%@\n", obj);
     //    }];
@@ -43,38 +43,38 @@
     [task resume];
 }
 
-- (void)fetchRepairRoportMessages:(void (^)(id))callback AtPage:(NSUInteger)page withSize:(NSUInteger)size {
++ (void)fetchRepairReportMessages:(void (^)(id))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size {
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/findRepairBySearch.do"];
-    NSDictionary *param = @{ @"state" : @"PROCESS", @"page" : @(page), @"pagesize": @(size) };
+    NSDictionary *parameters = @{ @"state" : @"PROCESS", @"page" : @(page), @"pagesize": @(size) };
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager POST:urlStr parameters:param success:^(NSURLSessionDataTask *task, id responseObject) {
+    [manager POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         callback(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@", error);
     }];
 }
 
-- (void)fetchMaintenanceMessages:(void (^)(id))callback AtPage:(NSUInteger)page withSize:(NSUInteger)size {
++ (void)fetchMaintenanceMessages:(void (^)(id))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size {
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/findRepairBySearch.do"];
-    NSDictionary *param = @{ @"page" : @(page), @"pagesize": @(size) };
+    NSDictionary *parameters = @{ @"page" : @(page), @"pagesize": @(size) };
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager POST:urlStr parameters:param success:^(NSURLSessionDataTask *task, id responseObject) {
+    [manager POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         callback(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@", error);
     }];}
 
-- (void)fetchFeedbackMessages:(void (^)(id))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size {
++ (void)fetchFeedbackMessages:(void (^)(id))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size {
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"AppFeedBack/findFeedbackBySearch.do"];
-    NSDictionary *param = @{ @"page" : @(page), @"pagesize": @(size) };
+    NSDictionary *parameters = @{ @"page" : @(page), @"pagesize": @(size) };
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    [manager POST:urlStr parameters:param success:^(NSURLSessionDataTask *task, id responseObject) {
+    [manager POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         callback(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@", error);

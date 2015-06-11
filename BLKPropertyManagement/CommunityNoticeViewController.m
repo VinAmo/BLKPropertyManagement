@@ -7,11 +7,15 @@
 //
 
 #import "HTTPDataFetcher.h"
+#import "UITableView+Associate.h"
+#import "CommunityNotice.h"
 #import "CommunityNoticeViewController.h"
 #import "NoticeDetailViewController.h"
 #import "AddNoticeViewController.h"
 
-@interface CommunityNoticeTVC : UITableViewCell
+#pragma mark - Table View Cell
+
+@interface CommunityNoticeTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) UIView *headerContainerView;
 @property (strong, nonatomic) UILabel *headerLeftLabel;
@@ -19,9 +23,11 @@
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *contentLabel;
 
+@property (strong, nonatomic) CommunityNotice *notice;
+
 @end
 
-@implementation CommunityNoticeTVC
+@implementation CommunityNoticeTableViewCell
 
 - (instancetype)init
 {
@@ -63,13 +69,18 @@
     self.headerRightLabel.frame = CGRectMake(CGRectGetMaxX(self.headerLeftLabel.frame), 0, self.headerContainerView.bounds.size.width * 0.3, self.headerContainerView.bounds.size.height);
     self.titleLabel.frame = CGRectMake(20, CGRectGetMaxY(self.headerContainerView.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.3);
     self.contentLabel.frame = CGRectMake(20, CGRectGetMaxY(self.titleLabel.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.5);
+    
+    self.titleLabel.text = self.notice.title;
+    self.contentLabel.text = self.notice.content;
 }
 
 @end
 
+#pragma mark - View Controller
+
 @interface CommunityNoticeViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) NSMutableArray *notices;
+@property (strong, nonatomic) UITableView *tableView;
 
 @end
 
@@ -82,37 +93,28 @@
     UIBarButtonItem *addBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddNoticeViewController)];
     self.navigationItem.rightBarButtonItem = addBarButtonItem;
     
-    UITableView *tableView = [[UITableView alloc] init];
-    tableView.frame = self.view.bounds;
-    tableView.dataSource = self;
-    tableView.delegate = self;
-    [self.view addSubview:tableView];
+    _tableView = [[UITableView alloc] init];
+    _tableView.frame = self.view.bounds;
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+    [self.view addSubview:_tableView];
+    
+    [self loadData];
 }
 
 #pragma mark - table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return self.tableView.data.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    CommunityNoticeTVC *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    CommunityNoticeTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {
-        cell = [[CommunityNoticeTVC alloc] init];
-        __weak typeof(cell) weakCell = cell;
-        
-        HTTPDataFetcher *fetcher = [[HTTPDataFetcher alloc] init];
-        [fetcher fetchCommunityNoticeMessages:^(id messages) {
-            if ([messages isKindOfClass:[NSArray class]]) {
-                NSDictionary *notice = messages[indexPath.item];
-                [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                    weakCell.titleLabel.text = [notice valueForKey:@"title"];
-                    weakCell.contentLabel.text = [notice valueForKey:@"content"];
-                    NSLog(@"%@ %@", weakCell.titleLabel.text, weakCell.contentLabel.text);
-                }];
-            }
-        } AtPage:1 WithSize:10];
+        cell = [[CommunityNoticeTableViewCell alloc] init];
     }
+    cell.notice = [self.tableView.data objectAtIndex:indexPath.item];
+    
     return cell;
 }
 
@@ -129,13 +131,31 @@
     }
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.navigationController pushViewController:[[NoticeDetailViewController alloc] init] animated:YES];
-}
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+//    [self.navigationController pushViewController:[[NoticeDetailViewController alloc] init] animated:YES];
+//}
 
 #pragma mark - functions
+
+- (void)loadData {
+    [HTTPDataFetcher fetchCommunityNoticeMessages:^(id messages) {
+        if ([messages isKindOfClass:[NSArray class]]) {
+            [messages enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
+                CommunityNotice *notice = [[CommunityNotice alloc] init];
+                notice.title = [obj valueForKey:@"title"];
+                notice.content = [obj valueForKey:@"content"];
+                notice.dueDate = [obj valueForKey:@"timeliness"];
+                notice.top = [[obj valueForKey:@"isTop"] boolValue];
+                [self.tableView.data addObject:notice];
+            }];
+            [self.tableView reloadData];
+        }
+    } AtPage:1 WithSize:10];
+    
+}
 
 - (void)showAddNoticeViewController {
     [self.navigationController pushViewController:[[AddNoticeViewController alloc] init] animated:YES];
 }
+
 @end
