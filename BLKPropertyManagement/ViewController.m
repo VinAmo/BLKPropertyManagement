@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "AccountViewController.h"
-#import "CommunityBulletinViewController.h"
+#import "CommunityNoticeViewController.h"
 #import "RepairReportManagementViewController.h"
 #import "MaintenanceManagementViewController.h"
 #import "FeedbackViewController.h"
@@ -28,12 +28,12 @@
     self.navigationItem.title = @"物业管理";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"账户" style:UIBarButtonItemStylePlain target:self action:@selector(showAccountViewController)];
     
-    UIButton *communityBulletinButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    communityBulletinButton.frame = CGRectMake(0, 0, 40, 40);
-    communityBulletinButton.center = CGPointMake(self.view.center.x - 60, 300);
-    [communityBulletinButton setBackgroundImage:[UIImage imageNamed:@"icon_bulletin"] forState:UIControlStateNormal];
-    [communityBulletinButton addTarget:self action:@selector(showCommunityBulletinViewController) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:communityBulletinButton];
+    UIButton *communityNoticeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    communityNoticeButton.frame = CGRectMake(0, 0, 40, 40);
+    communityNoticeButton.center = CGPointMake(self.view.center.x - 60, 300);
+    [communityNoticeButton setBackgroundImage:[UIImage imageNamed:@"icon_notice"] forState:UIControlStateNormal];
+    [communityNoticeButton addTarget:self action:@selector(showCommunityNoticeViewController) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:communityNoticeButton];
     
     UIButton *repairReportManagementButton = [UIButton buttonWithType:UIButtonTypeCustom];
     repairReportManagementButton.frame = CGRectMake(0, 0, 40, 40);
@@ -63,8 +63,8 @@
     [self.navigationController pushViewController:[[AccountViewController alloc] init] animated:YES];
 }
 
-- (void)showCommunityBulletinViewController {
-    [self.navigationController pushViewController:[[CommunityBulletinViewController alloc] init] animated:YES];
+- (void)showCommunityNoticeViewController {
+    [self.navigationController pushViewController:[[CommunityNoticeViewController alloc] init] animated:YES];
 }
 
 - (void)showRepairManagementViewController {

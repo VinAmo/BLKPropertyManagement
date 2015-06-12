@@ -140,6 +140,7 @@
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[param dataUsingEncoding:NSUTF8StringEncoding]];
     
+    __weak typeof(self) weakSelf = self;
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue new]
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
@@ -169,8 +170,8 @@
                                    
                                    dispatch_async(dispatch_get_main_queue(), ^{
                                        // back to main thread
-                                       [self.navigationController pushViewController:[[ViewController alloc] init] animated:YES];
-                                       [self.navigationController setNavigationBarHidden:NO];
+                                       [weakSelf.navigationController pushViewController:[[ViewController alloc] init] animated:YES];
+                                       [weakSelf.navigationController setNavigationBarHidden:NO];
                                    });
                                }
                                else {

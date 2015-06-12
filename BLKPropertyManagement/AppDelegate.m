@@ -38,8 +38,46 @@
     [_window makeKeyAndVisible];
     
     _servicePort = @"http://99b82737.ngrok.io/community_business";
+    [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES]; // try
+    [self setCookies];
     
     return YES;
+}
+
+- (void)setCookies {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *rolePermissionPkno = [userDefaults stringForKey:@"rolePermissionPkno"];
+    NSString *permissionsPkno = [userDefaults stringForKey:@"permissionsPkno"];
+    NSString *userPkno = [userDefaults stringForKey:@"userPkno"];
+    NSString *cookieDomain = self.servicePort;
+    NSString *cookiePath = @"AppNotice/findNoticeBySearch.do";
+    
+    NSDictionary *properties_1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"rolePermissionPkno", NSHTTPCookieName,
+                                  rolePermissionPkno, NSHTTPCookieValue,
+                                  cookieDomain, NSHTTPCookieDomain,
+                                  cookiePath, NSHTTPCookiePath,
+                                  nil];
+    NSDictionary *properties_2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"rolePermission", NSHTTPCookieName,
+                                  permissionsPkno, NSHTTPCookieValue,
+                                  cookieDomain, NSHTTPCookieDomain,
+                                  cookiePath, NSHTTPCookiePath,
+                                  nil];
+    NSDictionary *properties_3 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"userPkno", NSHTTPCookieName,
+                                  userPkno, NSHTTPCookieValue,
+                                  cookieDomain, NSHTTPCookieDomain,
+                                  cookiePath, NSHTTPCookiePath,
+                                  nil];
+    
+    NSHTTPCookie *cookie_1 = [NSHTTPCookie cookieWithProperties:properties_1];
+    NSHTTPCookie *cookie_2 = [NSHTTPCookie cookieWithProperties:properties_2];
+    NSHTTPCookie *cookie_3 = [NSHTTPCookie cookieWithProperties:properties_3];
+    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_1];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_2];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_3];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

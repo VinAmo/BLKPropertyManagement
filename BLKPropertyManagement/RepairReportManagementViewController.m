@@ -6,10 +6,11 @@
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
+#import "HTTPDataFetcher.h"
 #import "RepairReportManagementViewController.h"
 #import "RepairReportDetailViewController.h"
 
-@interface RepairReportManagementTVC : UITableViewCell
+@interface RepairReportManagementTableViewCell : UITableViewCell
 
 @property (strong, nonatomic) UIView *headerContainerView;
 @property (strong, nonatomic) UILabel *headerLeftLabel;
@@ -24,7 +25,7 @@
 
 @end
 
-@implementation RepairReportManagementTVC
+@implementation RepairReportManagementTableViewCell
 
 - (instancetype)init
 {
@@ -90,6 +91,10 @@
 
 @interface RepairReportManagementViewController () <UITableViewDataSource, UITableViewDelegate>
 
+@property (strong, nonatomic) NSMutableArray *data;
+@property (assign, nonatomic) NSUInteger page;
+@property (assign, nonatomic) NSUInteger size;
+
 @end
 
 @implementation RepairReportManagementViewController
@@ -99,23 +104,46 @@
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"报修管理";
     
+    self.page = 0; // default
+    self.size = 10; // default
+    
     UITableView *tableView = [[UITableView alloc] init];
     tableView.frame = self.view.bounds;
     tableView.dataSource = self;
     tableView.delegate = self;
     [self.view addSubview:tableView];
+    
+    
+    self.data = [NSMutableArray array];
+    [HTTPDataFetcher fetchRepairReportMessages:^(id messages) {
+        if ([messages isKindOfClass:[NSArray class]]) {
+            [self.data  addObjectsFromArray:messages];
+            NSLog(@"%@", messages);
+            [tableView reloadData];
+        }
+    } AtPage:1 WithSize:10];
+    
 }
 
 #pragma mark - table view data source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
+    return 30;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RepairReportManagementTVC *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    RepairReportManagementTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {
-        cell = [[RepairReportManagementTVC alloc] init];
+        cell = [[RepairReportManagementTableViewCell alloc] init];
+        if (self.data.count == 0) {
+            return cell;
+        }
+        NSDictionary *message = self.data[indexPath.item];
+        cell.housingTypeLabel.text = [cell.housingTypeLabel.text stringByAppendingString:[message valueForKey:@"category"]];
+        cell.buildingNumberLabel.text = [cell.buildingNumberLabel.text stringByAppendingString:[message valueForKey:@"houseAdd"]];
+        cell.reporterLabel.text = [cell.reporterLabel.text stringByAppendingString:[message valueForKey:@"employeeName"]];
+        cell.scheduleTimeLabel.text = [cell.scheduleTimeLabel.text stringByAppendingString:[message valueForKey:@"appointmentTime"]];
+        cell.phoneNumberLabel.text = [cell.phoneNumberLabel.text stringByAppendingString:[message valueForKey:@"employeePhone"]];
     }
     return cell;
 }
@@ -136,5 +164,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.navigationController pushViewController:[[RepairReportDetailViewController alloc] init] animated:YES];
 }
+
+- (void)loadData {
+    
+}
+
 
 @end

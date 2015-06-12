@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import <AFNetworking.h>
+#import <AFHTTPSessionManager.h>
+#import <AFNetworkActivityIndicatorManager.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
