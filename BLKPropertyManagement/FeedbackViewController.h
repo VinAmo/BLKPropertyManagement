@@ -6,8 +6,8 @@
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "BaseViewController.h"
 
-@interface FeedbackViewController : ViewController
+@interface FeedbackViewController : BaseViewController
 
 @end

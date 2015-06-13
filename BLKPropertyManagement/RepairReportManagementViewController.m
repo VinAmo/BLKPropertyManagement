@@ -7,14 +7,14 @@
 //
 
 #import "HTTPDataFetcher.h"
+#import "RepairReportMessage.h"
+#import "BaseTableViewCell.h"
 #import "RepairReportManagementViewController.h"
 #import "RepairReportDetailViewController.h"
 
-@interface RepairReportManagementTableViewCell : UITableViewCell
+#pragma mark - Table View Cell
 
-@property (strong, nonatomic) UIView *headerContainerView;
-@property (strong, nonatomic) UILabel *headerLeftLabel;
-@property (strong, nonatomic) UILabel *headerRightLabel;
+@interface RepairReportManagementTableViewCell : BaseTableViewCell
 
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *housingTypeLabel;
@@ -31,19 +31,8 @@
 {
     self = [super init];
     if (self) {
-        _headerContainerView = [[UIView alloc] init];
-        [self addSubview:_headerContainerView];
-        
-        _headerLeftLabel = [[UILabel alloc] init];
-        _headerLeftLabel.text = @"编号：";
-        _headerLeftLabel.textColor = [UIColor blueColor];
-        [_headerContainerView addSubview:_headerLeftLabel];
-        
-        _headerRightLabel = [[UILabel alloc] init];
-        _headerRightLabel.textAlignment = NSTextAlignmentRight;
-        _headerRightLabel.text = @"状态：";
-        _headerRightLabel.textColor = [UIColor blueColor];
-        [_headerContainerView addSubview:_headerRightLabel];
+        self.headerLeftLabel.text = @"编号：";
+        self.headerRightLabel.text = @"状态：";
         
         _titleLabel = [[UILabel alloc] init];
         [_titleLabel setFont:[UIFont fontWithName:nil size:20]];
@@ -75,25 +64,19 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     // fix the frame of cells is different with its containers.
-    self.headerContainerView.frame = CGRectMake(20, 0, self.bounds.size.width - 20, self.bounds.size.height * 0.1);
-    self.headerLeftLabel.frame = CGRectMake(0, 0, self.headerContainerView.bounds.size.width * 0.7, self.headerContainerView.bounds.size.height);
-    self.headerRightLabel.frame = CGRectMake(CGRectGetMaxX(self.headerLeftLabel.frame), 0, self.headerContainerView.bounds.size.width * 0.3, self.headerContainerView.bounds.size.height);
-    
-    self.titleLabel.frame = CGRectMake(20, CGRectGetMaxY(self.headerContainerView.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.1);
-    self.housingTypeLabel.frame = CGRectMake(20, CGRectGetMaxY(self.titleLabel.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.1);
-    self.buildingNumberLabel.frame = CGRectMake(20, CGRectGetMaxY(self.housingTypeLabel.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.1);
-    self.reporterLabel.frame = CGRectMake(20, CGRectGetMaxY(self.buildingNumberLabel.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.1);
-    self.scheduleTimeLabel.frame = CGRectMake(20, CGRectGetMaxY(self.reporterLabel.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.1);
-    self.phoneNumberLabel.frame = CGRectMake(20, CGRectGetMaxY(self.scheduleTimeLabel.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.1);
+    self.titleLabel.frame = CGRectMake(20, CGRectGetMaxY(self.headerContainerView.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.1);
+    self.housingTypeLabel.frame = CGRectMake(20, CGRectGetMaxY(self.titleLabel.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.1);
+    self.buildingNumberLabel.frame = CGRectMake(20, CGRectGetMaxY(self.housingTypeLabel.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.1);
+    self.reporterLabel.frame = CGRectMake(20, CGRectGetMaxY(self.buildingNumberLabel.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.1);
+    self.scheduleTimeLabel.frame = CGRectMake(20, CGRectGetMaxY(self.reporterLabel.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.1);
+    self.phoneNumberLabel.frame = CGRectMake(20, CGRectGetMaxY(self.scheduleTimeLabel.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.1);
 }
 
 @end
 
-@interface RepairReportManagementViewController () <UITableViewDataSource, UITableViewDelegate>
+#pragma mark - View Controller
 
-@property (strong, nonatomic) NSMutableArray *data;
-@property (assign, nonatomic) NSUInteger page;
-@property (assign, nonatomic) NSUInteger size;
+@interface RepairReportManagementViewController ()
 
 @end
 
@@ -103,71 +86,52 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"报修管理";
-    
-    self.page = 0; // default
-    self.size = 10; // default
-    
-    UITableView *tableView = [[UITableView alloc] init];
-    tableView.frame = self.view.bounds;
-    tableView.dataSource = self;
-    tableView.delegate = self;
-    [self.view addSubview:tableView];
-    
-    
-    self.data = [NSMutableArray array];
+}
+
+#pragma mark - functions
+
+- (void)fetch {
     [HTTPDataFetcher fetchRepairReportMessages:^(id messages) {
-        if ([messages isKindOfClass:[NSArray class]]) {
-            [self.data  addObjectsFromArray:messages];
-            NSLog(@"%@", messages);
-            [tableView reloadData];
+        if ([messages isKindOfClass:[NSDictionary class]]) {
+            [[messages valueForKey:@"Rows"] enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
+                RepairReportMessage *message = [[RepairReportMessage alloc] init];
+                message.housingType = [obj valueForKey:@"category"];
+                message.buildingNumber = [obj valueForKey:@"houseAdd"];
+                message.reporter = [obj valueForKey:@"employeeName"];
+                message.scheduleTime = [obj valueForKey:@"appointmentTime"];
+                message.phoneNumber = [obj valueForKey:@"employeePhone"];
+                [self.data  addObject:message];
+            }];
+            [self.tableView reloadData];
+            [self.activityIndicatorView stopAnimating];
         }
-    } AtPage:1 WithSize:10];
-    
+    } AtPage:self.page WithSize:self.size];
 }
 
 #pragma mark - table view data source
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 30;
-}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     RepairReportManagementTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {
         cell = [[RepairReportManagementTableViewCell alloc] init];
-        if (self.data.count == 0) {
-            return cell;
-        }
-        NSDictionary *message = self.data[indexPath.item];
-        cell.housingTypeLabel.text = [cell.housingTypeLabel.text stringByAppendingString:[message valueForKey:@"category"]];
-        cell.buildingNumberLabel.text = [cell.buildingNumberLabel.text stringByAppendingString:[message valueForKey:@"houseAdd"]];
-        cell.reporterLabel.text = [cell.reporterLabel.text stringByAppendingString:[message valueForKey:@"employeeName"]];
-        cell.scheduleTimeLabel.text = [cell.scheduleTimeLabel.text stringByAppendingString:[message valueForKey:@"appointmentTime"]];
-        cell.phoneNumberLabel.text = [cell.phoneNumberLabel.text stringByAppendingString:[message valueForKey:@"employeePhone"]];
     }
+    
+    if (self.data.count == 0) {
+        return cell;
+    }
+    RepairReportMessage *message = self.data[indexPath.item];
+    cell.housingTypeLabel.text = [cell.housingTypeLabel.text stringByAppendingString:message.housingType];
+    cell.buildingNumberLabel.text = [cell.buildingNumberLabel.text stringByAppendingString:message.buildingNumber];
+    cell.reporterLabel.text = [cell.reporterLabel.text stringByAppendingString:message.reporter];
+    cell.scheduleTimeLabel.text = [cell.scheduleTimeLabel.text stringByAppendingString:message.scheduleTime];
+    cell.phoneNumberLabel.text = [cell.phoneNumberLabel.text stringByAppendingString:message.phoneNumber];
     return cell;
 }
 
 #pragma mark - table view delegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 200;
-}
-
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.navigationController pushViewController:[[RepairReportDetailViewController alloc] init] animated:YES];
 }
-
-- (void)loadData {
-    
-}
-
 
 @end

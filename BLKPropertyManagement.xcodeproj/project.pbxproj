@@ -8,13 +8,18 @@
 
 /* Begin PBXBuildFile section */
 		3B95257FD5F86A6C20301E24 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4895CB57B4AD1059AC8CB85D /* libPods.a */; };
-		F4339A831B29696300B88352 /* UITableView+Associate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4339A821B29696300B88352 /* UITableView+Associate.m */; };
 		F4567C551B2569A5004F1D52 /* AccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4567C541B2569A5004F1D52 /* AccountViewController.m */; };
 		F4764A7F1B203EAE00BAABE0 /* AddNoticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4764A7E1B203EAE00BAABE0 /* AddNoticeViewController.m */; };
 		F4764A821B203F2600BAABE0 /* NoticeDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4764A811B203F2600BAABE0 /* NoticeDetailViewController.m */; };
 		F4764A851B203F3C00BAABE0 /* RepairReportDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4764A841B203F3C00BAABE0 /* RepairReportDetailViewController.m */; };
 		F4764A881B203F8C00BAABE0 /* FeedbackDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4764A871B203F8C00BAABE0 /* FeedbackDetailViewController.m */; };
 		F47F73721B227D5700224B40 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F47F73711B227D5700224B40 /* SignInViewController.m */; };
+		F484CF491B2ABF0200EC47E9 /* RepairReportMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F484CF481B2ABF0200EC47E9 /* RepairReportMessage.m */; };
+		F484CF4C1B2AC3CF00EC47E9 /* FeedBackMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F484CF4B1B2AC3CF00EC47E9 /* FeedBackMessage.m */; };
+		F484DEA51B2BC37700F5C3D7 /* BaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F484DEA41B2BC37700F5C3D7 /* BaseViewController.m */; };
+		F484DEA81B2BCF2700F5C3D7 /* BaseTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F484DEA71B2BCF2700F5C3D7 /* BaseTableViewCell.m */; };
+		F484DEAB1B2BD36100F5C3D7 /* MaintenanceMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F484DEAA1B2BD36100F5C3D7 /* MaintenanceMessage.m */; };
+		F484DEAE1B2BD3C100F5C3D7 /* MaintenanceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F484DEAD1B2BD3C100F5C3D7 /* MaintenanceDetailViewController.m */; };
 		F497FD1E1B27CB4600398531 /* HTTPDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = F497FD1D1B27CB4600398531 /* HTTPDataFetcher.m */; };
 		F497FD241B281E5500398531 /* CommunityNoticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F497FD231B281E5500398531 /* CommunityNoticeViewController.m */; };
 		F497FD271B281F5200398531 /* CommunityNotice.m in Sources */ = {isa = PBXBuildFile; fileRef = F497FD261B281F5200398531 /* CommunityNotice.m */; };
@@ -43,8 +48,6 @@
 		4895CB57B4AD1059AC8CB85D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F6CF61AFF85E9E27D6FDEB0 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		7C960D82837CCB51723701AE /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
-		F4339A811B29696300B88352 /* UITableView+Associate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+Associate.h"; sourceTree = "<group>"; };
-		F4339A821B29696300B88352 /* UITableView+Associate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+Associate.m"; sourceTree = "<group>"; };
 		F4567C531B2569A5004F1D52 /* AccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountViewController.h; sourceTree = "<group>"; };
 		F4567C541B2569A5004F1D52 /* AccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountViewController.m; sourceTree = "<group>"; };
 		F4764A7D1B203EAE00BAABE0 /* AddNoticeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddNoticeViewController.h; sourceTree = "<group>"; };
@@ -57,6 +60,18 @@
 		F4764A871B203F8C00BAABE0 /* FeedbackDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedbackDetailViewController.m; sourceTree = "<group>"; };
 		F47F73701B227D5700224B40 /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = "<group>"; };
 		F47F73711B227D5700224B40 /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = "<group>"; };
+		F484CF471B2ABF0200EC47E9 /* RepairReportMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RepairReportMessage.h; sourceTree = "<group>"; };
+		F484CF481B2ABF0200EC47E9 /* RepairReportMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RepairReportMessage.m; sourceTree = "<group>"; };
+		F484CF4A1B2AC3CF00EC47E9 /* FeedBackMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedBackMessage.h; sourceTree = "<group>"; };
+		F484CF4B1B2AC3CF00EC47E9 /* FeedBackMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedBackMessage.m; sourceTree = "<group>"; };
+		F484DEA31B2BC37700F5C3D7 /* BaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseViewController.h; sourceTree = "<group>"; };
+		F484DEA41B2BC37700F5C3D7 /* BaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseViewController.m; sourceTree = "<group>"; };
+		F484DEA61B2BCF2700F5C3D7 /* BaseTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseTableViewCell.h; sourceTree = "<group>"; };
+		F484DEA71B2BCF2700F5C3D7 /* BaseTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTableViewCell.m; sourceTree = "<group>"; };
+		F484DEA91B2BD36100F5C3D7 /* MaintenanceMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaintenanceMessage.h; sourceTree = "<group>"; };
+		F484DEAA1B2BD36100F5C3D7 /* MaintenanceMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaintenanceMessage.m; sourceTree = "<group>"; };
+		F484DEAC1B2BD3C100F5C3D7 /* MaintenanceDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaintenanceDetailViewController.h; sourceTree = "<group>"; };
+		F484DEAD1B2BD3C100F5C3D7 /* MaintenanceDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaintenanceDetailViewController.m; sourceTree = "<group>"; };
 		F497FD1C1B27CB4600398531 /* HTTPDataFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HTTPDataFetcher.h; sourceTree = "<group>"; };
 		F497FD1D1B27CB4600398531 /* HTTPDataFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HTTPDataFetcher.m; sourceTree = "<group>"; };
 		F497FD221B281E5500398531 /* CommunityNoticeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunityNoticeViewController.h; sourceTree = "<group>"; };
@@ -137,6 +152,8 @@
 		F48AAD751B29406C00E09ED6 /* RepairReportManagement */ = {
 			isa = PBXGroup;
 			children = (
+				F484CF471B2ABF0200EC47E9 /* RepairReportMessage.h */,
+				F484CF481B2ABF0200EC47E9 /* RepairReportMessage.m */,
 				F4C7259E1B1FF5A40005A8C7 /* RepairReportManagementViewController.h */,
 				F4C7259F1B1FF5A40005A8C7 /* RepairReportManagementViewController.m */,
 				F4764A831B203F3C00BAABE0 /* RepairReportDetailViewController.h */,
@@ -148,8 +165,12 @@
 		F48AAD761B29408700E09ED6 /* MaintenanceManagement */ = {
 			isa = PBXGroup;
 			children = (
+				F484DEA91B2BD36100F5C3D7 /* MaintenanceMessage.h */,
+				F484DEAA1B2BD36100F5C3D7 /* MaintenanceMessage.m */,
 				F4C725A11B1FF5CF0005A8C7 /* MaintenanceManagementViewController.h */,
 				F4C725A21B1FF5CF0005A8C7 /* MaintenanceManagementViewController.m */,
+				F484DEAC1B2BD3C100F5C3D7 /* MaintenanceDetailViewController.h */,
+				F484DEAD1B2BD3C100F5C3D7 /* MaintenanceDetailViewController.m */,
 			);
 			name = MaintenanceManagement;
 			sourceTree = "<group>";
@@ -157,6 +178,8 @@
 		F48AAD771B2940A000E09ED6 /* Feedback */ = {
 			isa = PBXGroup;
 			children = (
+				F484CF4A1B2AC3CF00EC47E9 /* FeedBackMessage.h */,
+				F484CF4B1B2AC3CF00EC47E9 /* FeedBackMessage.m */,
 				F4C725A41B1FF5F10005A8C7 /* FeedbackViewController.h */,
 				F4C725A51B1FF5F10005A8C7 /* FeedbackViewController.m */,
 				F4764A861B203F8C00BAABE0 /* FeedbackDetailViewController.h */,
@@ -170,8 +193,10 @@
 			children = (
 				F497FD1C1B27CB4600398531 /* HTTPDataFetcher.h */,
 				F497FD1D1B27CB4600398531 /* HTTPDataFetcher.m */,
-				F4339A811B29696300B88352 /* UITableView+Associate.h */,
-				F4339A821B29696300B88352 /* UITableView+Associate.m */,
+				F484DEA31B2BC37700F5C3D7 /* BaseViewController.h */,
+				F484DEA41B2BC37700F5C3D7 /* BaseViewController.m */,
+				F484DEA61B2BCF2700F5C3D7 /* BaseTableViewCell.h */,
+				F484DEA71B2BCF2700F5C3D7 /* BaseTableViewCell.m */,
 			);
 			name = Versatile;
 			sourceTree = "<group>";
@@ -379,22 +404,27 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F484DEAE1B2BD3C100F5C3D7 /* MaintenanceDetailViewController.m in Sources */,
 				F497FD241B281E5500398531 /* CommunityNoticeViewController.m in Sources */,
+				F484DEA51B2BC37700F5C3D7 /* BaseViewController.m in Sources */,
 				F4764A821B203F2600BAABE0 /* NoticeDetailViewController.m in Sources */,
 				F4C7257E1B1FE4950005A8C7 /* ViewController.m in Sources */,
 				F497FD271B281F5200398531 /* CommunityNotice.m in Sources */,
+				F484CF491B2ABF0200EC47E9 /* RepairReportMessage.m in Sources */,
 				F497FD1E1B27CB4600398531 /* HTTPDataFetcher.m in Sources */,
 				F4567C551B2569A5004F1D52 /* AccountViewController.m in Sources */,
 				F4C725A31B1FF5CF0005A8C7 /* MaintenanceManagementViewController.m in Sources */,
 				F47F73721B227D5700224B40 /* SignInViewController.m in Sources */,
 				F4C725A61B1FF5F10005A8C7 /* FeedbackViewController.m in Sources */,
 				F4764A881B203F8C00BAABE0 /* FeedbackDetailViewController.m in Sources */,
-				F4339A831B29696300B88352 /* UITableView+Associate.m in Sources */,
 				F4C725A01B1FF5A40005A8C7 /* RepairReportManagementViewController.m in Sources */,
+				F484CF4C1B2AC3CF00EC47E9 /* FeedBackMessage.m in Sources */,
+				F484DEA81B2BCF2700F5C3D7 /* BaseTableViewCell.m in Sources */,
 				F4C7257B1B1FE4950005A8C7 /* AppDelegate.m in Sources */,
 				F4764A7F1B203EAE00BAABE0 /* AddNoticeViewController.m in Sources */,
 				F4764A851B203F3C00BAABE0 /* RepairReportDetailViewController.m in Sources */,
 				F4C725781B1FE4950005A8C7 /* main.m in Sources */,
+				F484DEAB1B2BD36100F5C3D7 /* MaintenanceMessage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

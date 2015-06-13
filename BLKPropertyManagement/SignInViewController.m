@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "SignInViewController.h"
+#import "ViewController.h"
 
 @interface SignInViewController () <UITextFieldDelegate, UIAlertViewDelegate>
 

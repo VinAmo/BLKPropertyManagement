@@ -6,14 +6,15 @@
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
+#import "HTTPDataFetcher.h"
+#import "FeedBackMessage.h"
+#import "BaseTableViewCell.h"
 #import "FeedbackViewController.h"
 #import "FeedbackDetailViewController.h"
 
-@interface FeedbackTVC : UITableViewCell
+#pragma mark - Table View Cell
 
-@property (strong, nonatomic) UIView *headerContainerView;
-@property (strong, nonatomic) UILabel *headerLeftLabel;
-@property (strong, nonatomic) UILabel *headerRightLabel;
+@interface FeedbackTableViewCell : BaseTableViewCell
 
 @property (strong, nonatomic) UILabel *titleLabel;
 @property (strong, nonatomic) UILabel *feedbackLabel;
@@ -24,25 +25,14 @@
 
 @end
 
-@implementation FeedbackTVC
+@implementation FeedbackTableViewCell
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
-        _headerContainerView = [[UIView alloc] init];
-        [self addSubview:_headerContainerView];
-        
-        _headerLeftLabel = [[UILabel alloc] init];
-        _headerLeftLabel.text = @"类型：";
-        _headerLeftLabel.textColor = [UIColor blueColor];
-        [_headerContainerView addSubview:_headerLeftLabel];
-        
-        _headerRightLabel = [[UILabel alloc] init];
-        _headerRightLabel.textAlignment = NSTextAlignmentRight;
-        _headerRightLabel.text = @"状态：";
-        _headerRightLabel.textColor = [UIColor blueColor];
-        [_headerContainerView addSubview:_headerRightLabel];
+        self.headerLeftLabel.text = @"类型：";
+        self.headerRightLabel.text = @"状态：";
         
         _titleLabel = [[UILabel alloc] init];
         [_titleLabel setFont:[UIFont fontWithName:nil size:20]];
@@ -74,10 +64,6 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     // fix the frame of cells is different with its containers.
-    self.headerContainerView.frame = CGRectMake(20, 0, self.bounds.size.width - 20, self.bounds.size.height * 0.1);
-    self.headerLeftLabel.frame = CGRectMake(0, 0, self.headerContainerView.bounds.size.width * 0.7, self.headerContainerView.bounds.size.height);
-    self.headerRightLabel.frame = CGRectMake(CGRectGetMaxX(self.headerLeftLabel.frame), 0, self.headerContainerView.bounds.size.width * 0.3, self.headerContainerView.bounds.size.height);
-    
     self.titleLabel.frame = CGRectMake(20, CGRectGetMaxY(self.headerContainerView.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.1);
     self.feedbackLabel.frame = CGRectMake(20, CGRectGetMaxY(self.titleLabel.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.1);
     self.addressLabel.frame = CGRectMake(20, CGRectGetMaxY(self.feedbackLabel.frame), self.bounds.size.width - 20, self.bounds.size.height * 0.1);
@@ -88,7 +74,9 @@
 
 @end
 
-@interface FeedbackViewController () <UITableViewDataSource, UITableViewDelegate>
+#pragma mark - View Controller
+
+@interface FeedbackViewController ()
 
 @end
 
@@ -98,40 +86,50 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"反馈信息";
-    
-    UITableView *tableView = [[UITableView alloc] init];
-    tableView.frame = self.view.bounds;
-    tableView.dataSource = self;
-    tableView.delegate = self;
-    [self.view addSubview:tableView];
+}
+
+#pragma mark - functions
+
+- (void)fetch {
+    [HTTPDataFetcher fetchFeedbackMessages:^(id messages) {
+        if ([messages isKindOfClass:[NSDictionary class]]) {
+            [[messages valueForKey:@"Rows"] enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
+                FeedBackMessage *message = [[FeedBackMessage alloc] init];
+                message.feedback = [obj valueForKey:@"describeContent"];
+                message.address = [obj valueForKey:@"building"];
+                message.address = [message.address stringByAppendingString:[obj valueForKey:@"houseNumber"]];
+                message.person = [obj valueForKey:@"ownerName"];
+                message.time = [obj valueForKey:@"inputTime"];
+                message.phoneNumber = [obj valueForKey:@"phone"];
+                [self.data addObject:message];
+            }];
+            [self.tableView reloadData];
+            [self.activityIndicatorView stopAnimating];
+        }
+    } AtPage:self.page WithSize:self.size];
 }
 
 #pragma mark - table view data source
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 10;
-}
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    FeedbackTVC *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    FeedbackTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {
-        cell = [[FeedbackTVC alloc] init];
+        cell = [[FeedbackTableViewCell alloc] init];
     }
+    
+    if (self.data.count == 0) {
+        return cell;
+    }
+    FeedBackMessage *message = [self.data objectAtIndex:indexPath.item];
+    cell.feedbackLabel.text = [cell.feedbackLabel.text stringByAppendingString:message.feedback];
+    cell.addressLabel.text = [cell.addressLabel.text stringByAppendingString:message.address];
+    cell.personLabel.text = [cell.personLabel.text stringByAppendingString:message.person];
+    cell.timeLabel.text = [cell.timeLabel.text stringByAppendingString:message.time];
+    cell.phoneNumberLabel.text = [cell.phoneNumberLabel.text stringByAppendingString:message.phoneNumber];
     return cell;
 }
 
 #pragma mark - table view delegate
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 200;
-}
-
-
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-    }
-}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.navigationController pushViewController:[[FeedbackDetailViewController alloc] init] animated:YES];

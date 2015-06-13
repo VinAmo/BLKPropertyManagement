@@ -6,8 +6,8 @@
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
-#import "ViewController.h"
+#import <UIKit/UIKit.h>
 
-@interface AddNoticeViewController : ViewController
+@interface AddNoticeViewController : UIViewController
 
 @end

@@ -47,12 +47,12 @@
     phoneNumberLabel.text = @"联系方式：";
     [self.view addSubview:phoneNumberLabel];
     
-    titleLabel.frame = CGRectMake(20, 0, self.view.bounds.size.width - 20, self.view.bounds.size.height * 0.1);
-    feedbackLabel.frame = CGRectMake(20, CGRectGetMaxY(titleLabel.frame), self.view.bounds.size.width - 20, self.view.bounds.size.height * 0.1);
-    addressLabel.frame = CGRectMake(20, CGRectGetMaxY(feedbackLabel.frame), self.view.bounds.size.width - 20, self.view.bounds.size.height * 0.1);
-    personLabel.frame = CGRectMake(20, CGRectGetMaxY(addressLabel.frame), self.view.bounds.size.width - 20, self.view.bounds.size.height * 0.1);
-    timeLabel.frame = CGRectMake(20, CGRectGetMaxY(personLabel.frame), self.view.bounds.size.width - 20, self.view.bounds.size.height * 0.1);
-    phoneNumberLabel.frame = CGRectMake(20, CGRectGetMaxY(timeLabel.frame), self.view.bounds.size.width - 20, self.view.bounds.size.height * 0.1);
+    titleLabel.frame = CGRectMake(20, 0, self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
+    feedbackLabel.frame = CGRectMake(20, CGRectGetMaxY(titleLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
+    addressLabel.frame = CGRectMake(20, CGRectGetMaxY(feedbackLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
+    personLabel.frame = CGRectMake(20, CGRectGetMaxY(addressLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
+    timeLabel.frame = CGRectMake(20, CGRectGetMaxY(personLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
+    phoneNumberLabel.frame = CGRectMake(20, CGRectGetMaxY(timeLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
 }
 
 @end

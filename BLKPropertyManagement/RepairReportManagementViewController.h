@@ -6,8 +6,8 @@
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "BaseViewController.h"
 
-@interface RepairReportManagementViewController : ViewController
+@interface RepairReportManagementViewController : BaseViewController
 
 @end
