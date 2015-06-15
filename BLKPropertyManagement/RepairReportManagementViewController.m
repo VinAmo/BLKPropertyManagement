@@ -91,6 +91,18 @@
 #pragma mark - functions
 
 - (void)fetch {
+    [HTTPDataFetcher fetchRepairReportFilterMessages:^(id messages) {
+        if ([messages isKindOfClass:[NSDictionary class]]) {
+            [[messages valueForKey:@"state"] enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
+                [self.dataFilter addObject:[obj valueForKey:@"type_code"]];
+            }];
+            [[messages valueForKey:@"type"] enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
+                [self.dataFilter addObject:[obj valueForKey:@"type_code"]];
+            }];
+            [self.dropDownMenu reloadData];
+        }
+    }];
+    
     [HTTPDataFetcher fetchRepairReportMessages:^(id messages) {
         if ([messages isKindOfClass:[NSDictionary class]]) {
             [[messages valueForKey:@"Rows"] enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
@@ -111,27 +123,54 @@
 #pragma mark - table view data source
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    RepairReportManagementTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"Cell"];
     if (!cell) {
-        cell = [[RepairReportManagementTableViewCell alloc] init];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"Cell"];
     }
     
-    if (self.data.count == 0) {
+    if ([tableView isEqual:self.dropDownMenu]) {
+        if (self.dataFilter.count == 0) {
+            return cell;
+        }
+
+        cell.textLabel.text = self.dataFilter[indexPath.item];
         return cell;
     }
-    RepairReportMessage *message = self.data[indexPath.item];
-    cell.housingTypeLabel.text = [cell.housingTypeLabel.text stringByAppendingString:message.housingType];
-    cell.buildingNumberLabel.text = [cell.buildingNumberLabel.text stringByAppendingString:message.buildingNumber];
-    cell.reporterLabel.text = [cell.reporterLabel.text stringByAppendingString:message.reporter];
-    cell.scheduleTimeLabel.text = [cell.scheduleTimeLabel.text stringByAppendingString:message.scheduleTime];
-    cell.phoneNumberLabel.text = [cell.phoneNumberLabel.text stringByAppendingString:message.phoneNumber];
-    return cell;
+    else if ([tableView isEqual:self.tableView]) {
+        RepairReportManagementTableViewCell *subCell = [tableView dequeueReusableCellWithIdentifier:@"SubCell"];
+        if (!subCell) {
+            subCell = [[RepairReportManagementTableViewCell alloc] init];
+        }
+        
+        if (self.data.count == 0) {
+            return subCell;
+        }
+        
+//        RepairReportMessage *message = self.data[indexPath.item];
+//        subCell.housingTypeLabel.text = [subCell.housingTypeLabel.text stringByAppendingString:message.housingType];
+//        subCell.buildingNumberLabel.text = [subCell.buildingNumberLabel.text stringByAppendingString:message.buildingNumber];
+//        subCell.reporterLabel.text = [subCell.reporterLabel.text stringByAppendingString:message.reporter];
+//        subCell.scheduleTimeLabel.text = [subCell.scheduleTimeLabel.text stringByAppendingString:message.scheduleTime];
+//        subCell.phoneNumberLabel.text = [subCell.phoneNumberLabel.text stringByAppendingString:message.phoneNumber];
+        return subCell;
+    }
+    else {
+        return cell;
+    }
 }
 
 #pragma mark - table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.navigationController pushViewController:[[RepairReportDetailViewController alloc] init] animated:YES];
+    if ([tableView isEqual:self.dropDownMenu]) {
+        
+    }
+    else if ([tableView isEqual:self.tableView]) {
+        [self.navigationController pushViewController:[[RepairReportDetailViewController alloc] init] animated:YES];
+    }
+    else {
+        
+    }
 }
 
 @end

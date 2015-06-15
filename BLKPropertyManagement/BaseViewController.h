@@ -7,12 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DropDownMenu.h"
 
 @interface BaseViewController : UIViewController
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicatorView;
+@property (strong, nonatomic) DropDownMenu *dropDownMenu;
 
+@property (strong, nonatomic) NSMutableArray *dataFilter;
 @property (strong, nonatomic) NSMutableArray *data;
 @property (assign, nonatomic) NSUInteger page;
 @property (assign, nonatomic) NSUInteger size;

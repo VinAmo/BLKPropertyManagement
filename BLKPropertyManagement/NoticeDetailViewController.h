@@ -10,4 +10,6 @@
 
 @interface NoticeDetailViewController : UIViewController
 
+@property (copy, nonatomic) NSString *uuid;
+
 @end

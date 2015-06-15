@@ -77,7 +77,6 @@
     loginButton.backgroundColor = [UIColor grayColor];
     loginButton.layer.masksToBounds = YES;
     loginButton.layer.cornerRadius = 5.f;
-    [loginButton setTintColor:[UIColor whiteColor]];
     [loginButton setTitle:@"Sign in" forState:UIControlStateNormal];
     [loginButton addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:loginButton];
@@ -88,7 +87,6 @@
     cancelButton.backgroundColor = [UIColor grayColor];
     cancelButton.layer.masksToBounds = YES;
     cancelButton.layer.cornerRadius = 5.f;
-    [cancelButton setTintColor:[UIColor whiteColor]];
     [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
     [cancelButton addTarget:self action:@selector(cancel) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:cancelButton];
@@ -157,6 +155,9 @@
                                if ([[rootDic objectForKey:@"message"] isEqualToString:@"success"]) {
                                    [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] enumerateObjectsUsingBlock:^(NSHTTPCookie *obj, NSUInteger idx, BOOL *stop) {
 //                                       NSLog(@"Cookies :%@\n", obj);
+                                       if ([[obj valueForKey:@"name"] isEqualToString:@"token"]) {
+                                           [userDefaults setObject:[obj valueForKey:@"value"] forKey:@"token"];
+                                       }
                                    }];
                                    
                                    NSDictionary *rolePermission = [rootDic objectForKey:@"rolePermission"];

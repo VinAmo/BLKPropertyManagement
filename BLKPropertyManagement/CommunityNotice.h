@@ -10,6 +10,7 @@
 
 @interface CommunityNotice : NSObject
 
+@property (copy, nonatomic) NSString *uuid;
 @property (copy, nonatomic) NSString *title;
 @property (copy, nonatomic) NSString *content;
 @property (copy, nonatomic) NSString *dueDate;

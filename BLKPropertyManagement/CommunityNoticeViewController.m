@@ -92,6 +92,7 @@
         if ([messages isKindOfClass:[NSArray class]]) {
             [messages enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
                 CommunityNotice *notice = [[CommunityNotice alloc] init];
+                notice.uuid = [obj valueForKey:@"announcementPkno"];
                 notice.title = [obj valueForKey:@"title"];
                 notice.content = [obj valueForKey:@"content"];
                 notice.dueDate = [obj valueForKey:@"timeliness"];
@@ -120,7 +121,7 @@
     if (self.data.count == 0) {
         return cell;
     }
-    CommunityNotice *notice = [self.data objectAtIndex:indexPath.item];
+    CommunityNotice *notice = self.data[indexPath.item];
     cell.headerLeftLabel.text = [cell.headerLeftLabel.text stringByAppendingString:[notice.dueDate isEqual:[NSNull null]] ? @"" : notice.dueDate];
     cell.headerRightLabel.text = [cell.headerRightLabel.text stringByAppendingString:notice.isTop ? @"是" : @"否"];
     cell.titleLabel.text = notice.title;
@@ -136,7 +137,10 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [self.navigationController pushViewController:[[NoticeDetailViewController alloc] init] animated:YES];
+    NoticeDetailViewController *noticeDetailViewController = [[NoticeDetailViewController alloc] init];
+    CommunityNotice *notice = self.data[indexPath.item];
+    noticeDetailViewController.uuid = notice.uuid;
+    [self.navigationController pushViewController:noticeDetailViewController animated:YES];
 }
 
 @end

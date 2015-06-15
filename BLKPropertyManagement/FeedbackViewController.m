@@ -91,6 +91,10 @@
 #pragma mark - functions
 
 - (void)fetch {
+    [HTTPDataFetcher fetchFeedbackFilterMessages:^(id messages) {
+        
+    }];
+    
     [HTTPDataFetcher fetchFeedbackMessages:^(id messages) {
         if ([messages isKindOfClass:[NSDictionary class]]) {
             [[messages valueForKey:@"Rows"] enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
