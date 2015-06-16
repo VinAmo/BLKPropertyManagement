@@ -107,8 +107,8 @@
                 message.phoneNumber = [obj valueForKey:@"phone"];
                 [self.data addObject:message];
             }];
-            [self.tableView reloadData];
             [self.activityIndicatorView stopAnimating];
+            [self.tableView reloadData];
         }
     } AtPage:self.page WithSize:self.size];
 }

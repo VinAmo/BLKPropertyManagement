@@ -99,8 +99,8 @@
                 notice.top = [[obj valueForKey:@"isTop"] boolValue];
                 [self.data addObject:notice];
             }];
-            [self.tableView reloadData];
             [self.activityIndicatorView stopAnimating];
+            [self.tableView reloadData];
         }
     } AtPage:self.page WithSize:self.size];
 }

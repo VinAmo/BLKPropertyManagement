@@ -114,8 +114,8 @@
                 message.phoneNumber = [obj valueForKey:@"employeePhone"];
                 [self.data  addObject:message];
             }];
-            [self.tableView reloadData];
             [self.activityIndicatorView stopAnimating];
+            [self.tableView reloadData];
         }
     } AtPage:self.page WithSize:self.size];
 }
@@ -146,9 +146,9 @@
             return subCell;
         }
         
-//        RepairReportMessage *message = self.data[indexPath.item];
-//        subCell.housingTypeLabel.text = [subCell.housingTypeLabel.text stringByAppendingString:message.housingType];
-//        subCell.buildingNumberLabel.text = [subCell.buildingNumberLabel.text stringByAppendingString:message.buildingNumber];
+        RepairReportMessage *message = self.data[indexPath.item];
+        subCell.housingTypeLabel.text = [subCell.housingTypeLabel.text stringByAppendingString:message.housingType];
+        subCell.buildingNumberLabel.text = [subCell.buildingNumberLabel.text stringByAppendingString:message.buildingNumber];
 //        subCell.reporterLabel.text = [subCell.reporterLabel.text stringByAppendingString:message.reporter];
 //        subCell.scheduleTimeLabel.text = [subCell.scheduleTimeLabel.text stringByAppendingString:message.scheduleTime];
 //        subCell.phoneNumberLabel.text = [subCell.phoneNumberLabel.text stringByAppendingString:message.phoneNumber];

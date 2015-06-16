@@ -6,6 +6,7 @@
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
+#import "HTTPDataFetcher.h"
 #import "BaseViewController.h"
 
 @interface BaseViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -57,7 +58,7 @@
     [self.view addSubview:_dropDownMenu];
     
     _page = 1; // default
-    _size = 5; // default
+    _size = 10; // default
     
     [self loadData];
 }
@@ -79,8 +80,10 @@
 #pragma mark - functions
 
 - (void)loadData{
+    [HTTPDataFetcher setCookies];
     [self.activityIndicatorView startAnimating];
     [self fetch];
+    [HTTPDataFetcher deleteCookies];
     self.page++;
 }
 
@@ -127,7 +130,6 @@
     else {
         return 5; // default
     }
-    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {

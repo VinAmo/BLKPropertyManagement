@@ -10,6 +10,9 @@
 
 @interface HTTPDataFetcher : NSObject
 
++ (void)setCookies;
++ (void)deleteCookies;
+
 + (void)fetchCommunityNoticeMessages:(void (^)(id messages))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size;
 
 + (void)fetchRepairReportFilterMessages:(void (^)(id messages))callback;

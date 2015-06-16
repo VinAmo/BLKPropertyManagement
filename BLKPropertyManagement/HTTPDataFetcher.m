@@ -11,6 +11,63 @@
 
 @implementation HTTPDataFetcher
 
++ (void)setCookies {
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    NSString *token = [userDefaults stringForKey:@"token"];
+    NSString *rolePermissionPkno = [userDefaults stringForKey:@"rolePermissionPkno"];
+    NSString *permissionsPkno = [userDefaults stringForKey:@"permissionsPkno"];
+    NSString *userPkno = [userDefaults stringForKey:@"userPkno"];
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSString *cookieDomain = delegate.servicePort;
+    NSString *cookiePath = @"/";
+    
+    NSDictionary *properties_1 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"token", NSHTTPCookieName,
+                                  token, NSHTTPCookieValue,
+                                  cookieDomain, NSHTTPCookieDomain,
+                                  cookiePath, NSHTTPCookiePath,
+                                  nil];
+    NSDictionary *properties_2 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"rolePermissionPkno", NSHTTPCookieName,
+                                  rolePermissionPkno, NSHTTPCookieValue,
+                                  cookieDomain, NSHTTPCookieDomain,
+                                  cookiePath, NSHTTPCookiePath,
+                                  nil];
+    NSDictionary *properties_3 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"rolePermission", NSHTTPCookieName,
+                                  permissionsPkno, NSHTTPCookieValue,
+                                  cookieDomain, NSHTTPCookieDomain,
+                                  cookiePath, NSHTTPCookiePath,
+                                  nil];
+    NSDictionary *properties_4 = [NSDictionary dictionaryWithObjectsAndKeys:
+                                  @"userPkno", NSHTTPCookieName,
+                                  userPkno, NSHTTPCookieValue,
+                                  cookieDomain, NSHTTPCookieDomain,
+                                  cookiePath, NSHTTPCookiePath,
+                                  nil];
+    
+    NSHTTPCookie *cookie_1 = [NSHTTPCookie cookieWithProperties:properties_1];
+    NSHTTPCookie *cookie_2 = [NSHTTPCookie cookieWithProperties:properties_2];
+    NSHTTPCookie *cookie_3 = [NSHTTPCookie cookieWithProperties:properties_3];
+    NSHTTPCookie *cookie_4 = [NSHTTPCookie cookieWithProperties:properties_4];
+    
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_1];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_2];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_3];
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_4];
+    
+    //    [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+    //        NSLog(@"Cookie :%@\n", obj);
+    //    }];
+}
+
++ (void)deleteCookies {
+    [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] deleteCookie:obj];
+    }];
+    
+}
+
 + (void)fetchCommunityNoticeMessages:(void (^)(id))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size {
 //    [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
 //        NSLog(@"Cookie :%@\n", obj);
@@ -55,7 +112,7 @@
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/repairState.do"];
     NSDictionary *parameters = @{  };
     [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        callback(responseObject);NSLog(@"%@", responseObject);
+        callback(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@", error);
     }];
@@ -66,7 +123,7 @@
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/findRepairBySearch.do"];
     NSDictionary *parameters = @{ @"category": category, @"page": @(page), @"pagesize": @(size) };
     [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        callback(responseObject);
+        callback(responseObject);NSLog(@"%@", responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@", error);
     }];

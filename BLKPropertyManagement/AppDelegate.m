@@ -39,59 +39,11 @@
     
     _servicePort = @"http://99b82737.ngrok.io/community_business";
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES]; // try
-    [self setCookies];
     
     return YES;
 }
 
-- (void)setCookies {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    NSString *token = [userDefaults stringForKey:@"token"];
-    NSString *rolePermissionPkno = [userDefaults stringForKey:@"rolePermissionPkno"];
-    NSString *permissionsPkno = [userDefaults stringForKey:@"permissionsPkno"];
-    NSString *userPkno = [userDefaults stringForKey:@"userPkno"];
-    NSString *cookieDomain = self.servicePort;
-    NSString *cookiePath = @"/";
-    
-    NSDictionary *properties_1 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  @"token", NSHTTPCookieName,
-                                  token, NSHTTPCookieValue,
-                                  cookieDomain, NSHTTPCookieDomain,
-                                  cookiePath, NSHTTPCookiePath,
-                                  nil];
-    NSDictionary *properties_2 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  @"rolePermissionPkno", NSHTTPCookieName,
-                                  rolePermissionPkno, NSHTTPCookieValue,
-                                  cookieDomain, NSHTTPCookieDomain,
-                                  cookiePath, NSHTTPCookiePath,
-                                  nil];
-    NSDictionary *properties_3 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  @"rolePermission", NSHTTPCookieName,
-                                  permissionsPkno, NSHTTPCookieValue,
-                                  cookieDomain, NSHTTPCookieDomain,
-                                  cookiePath, NSHTTPCookiePath,
-                                  nil];
-    NSDictionary *properties_4 = [NSDictionary dictionaryWithObjectsAndKeys:
-                                  @"userPkno", NSHTTPCookieName,
-                                  userPkno, NSHTTPCookieValue,
-                                  cookieDomain, NSHTTPCookieDomain,
-                                  cookiePath, NSHTTPCookiePath,
-                                  nil];
-    
-    NSHTTPCookie *cookie_1 = [NSHTTPCookie cookieWithProperties:properties_1];
-    NSHTTPCookie *cookie_2 = [NSHTTPCookie cookieWithProperties:properties_2];
-    NSHTTPCookie *cookie_3 = [NSHTTPCookie cookieWithProperties:properties_3];
-    NSHTTPCookie *cookie_4 = [NSHTTPCookie cookieWithProperties:properties_4];
-    
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_1];
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_2];
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_3];
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie_4];
-    
-//    [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//        NSLog(@"Cookie :%@\n", obj);
-//    }];
-}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

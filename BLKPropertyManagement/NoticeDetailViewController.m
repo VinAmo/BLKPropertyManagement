@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "HTTPDataFetcher.h"
 #import "NoticeDetailViewController.h"
 
 @interface NoticeDetailViewController () <UIWebViewDelegate>
@@ -31,19 +32,15 @@
     [_indicator setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
     [webView addSubview:_indicator];
     
-    [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSLog(@"Cookie :%@\n", obj);
-    }];
-        
+    [HTTPDataFetcher setCookies];
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     NSString *urlStr = [delegate.servicePort stringByAppendingFormat:@"/AppNotice/findNoticeView.do?uuid=%@", _uuid];
 //    NSString *parameters = [NSString stringWithFormat:@"uuid=%@", _uuid];
 //    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
 //    [request setHTTPMethod:@"POST"];
 //    [request setHTTPBody:[parameters dataUsingEncoding:NSUTF8StringEncoding]];
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]];
-    
-    [webView loadRequest:request];
+    [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlStr]]];
+    [HTTPDataFetcher deleteCookies];
 }
 
 #pragma mark - web view delegate
