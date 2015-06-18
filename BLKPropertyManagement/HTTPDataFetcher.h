@@ -13,15 +13,15 @@
 + (void)setCookies;
 + (void)deleteCookies;
 
-+ (void)fetchCommunityNoticeMessages:(void (^)(id messages))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size;
-
 + (void)fetchRepairReportFilterMessages:(void (^)(id messages))callback;
-+ (void)fetchRepairReportMessages:(void (^)(id messages))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size Category:(NSString *)category;
-+ (void)fetchRepairReportMessages:(void (^)(id messages))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size;
-
-+ (void)fetchMaintenanceMessages:(void (^)(id messages))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size;
-
 + (void)fetchFeedbackFilterMessages:(void (^)(id messages))callback;
-+ (void)fetchFeedbackMessages:(void (^)(id messages))callback AtPage:(NSUInteger)page WithSize:(NSUInteger)size;
+
++ (void)fetchCommunityNoticeMessages:(void (^)(id messages))callback withPage:(NSUInteger)page size:(NSUInteger)size;
++ (void)fetchRepairReportMessages:(void (^)(id messages))callback withPage:(NSUInteger)page size:(NSUInteger)size category:(NSString *)category state:(NSString *)state;
++ (void)fetchMaintenanceMessages:(void (^)(id messages))callback withPage:(NSUInteger)page size:(NSUInteger)size category:(NSString *)category state:(NSString *)state;
++ (void)fetchFeedbackMessages:(void (^)(id messages))callback withPage:(NSUInteger)page size:(NSUInteger)size category:(NSString *)category person:(NSString *)person;
+
++ (void)fetchRepairReportConfirmMessages:(void (^)(id messages))callback withReportIdentifier:(NSString *)identifier content:(NSString *)content time:(NSString *)time;
++ (void)fetchRepairReportCancelMessages:(void (^)(id messages))callback withReportIdentifier:(NSString *)identifier;
 
 @end

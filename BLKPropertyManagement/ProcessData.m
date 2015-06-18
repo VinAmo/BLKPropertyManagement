@@ -10,4 +10,18 @@
 
 @implementation ProcessData
 
++ (NSDictionary *)resultFromSource:(NSDictionary *)source {
+    NSMutableDictionary *result = [NSMutableDictionary dictionary];
+    [source enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        if ([key isEqual:[NSNull null]]) {
+            key = @"";
+        }
+        if ([obj isEqual:[NSNull null]]) {
+            obj = @"";
+        }
+        [result setObject:obj forKey:key];
+    }];
+    return result;
+}
+
 @end

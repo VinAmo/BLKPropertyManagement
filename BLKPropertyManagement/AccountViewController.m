@@ -13,12 +13,14 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     self.view = [[UIView alloc] init];
     self.view.frame = [[UIScreen mainScreen] bounds];
     self.view.backgroundColor = [UIColor whiteColor];
     
     UILabel *usernameLabel = [[UILabel alloc] init];
-    usernameLabel.frame = CGRectMake(20, 50, 80, 40);
+    usernameLabel.frame = CGRectMake(20, 50, 100, 40);
     usernameLabel.backgroundColor = [UIColor grayColor];
     usernameLabel.layer.masksToBounds = YES;
     usernameLabel.layer.cornerRadius = 5.f;
@@ -27,19 +29,19 @@
     usernameLabel.text = [NSString stringWithFormat:@"账户:%@", [[NSUserDefaults standardUserDefaults] stringForKey:@"username"]];
     [self.view addSubview:usernameLabel];
     
-    UIButton *logoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    logoutButton.frame = CGRectMake(20, 100, 80, 40);
+    UIButton *logoutButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    logoutButton.frame = CGRectMake(20, 100, 100, 40);
     logoutButton.backgroundColor = [UIColor grayColor];
+    logoutButton.tintColor = [UIColor whiteColor];
     logoutButton.layer.masksToBounds = YES;
     logoutButton.layer.cornerRadius = 5.f;
-    [logoutButton setTintColor:[UIColor whiteColor]];
     [logoutButton setTitle:@"Sign out" forState:UIControlStateNormal];
     [logoutButton addTarget:self action:@selector(logout) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:logoutButton];
 }
 
 - (void)logout {
-    
+    [[NSUserDefaults standardUserDefaults] removePersistentDomainForName:[[NSBundle mainBundle] bundleIdentifier]];
 }
 
 @end

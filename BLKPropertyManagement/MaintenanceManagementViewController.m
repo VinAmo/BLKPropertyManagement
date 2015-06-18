@@ -105,7 +105,7 @@
             [self.activityIndicatorView stopAnimating];
             [self.tableView reloadData];
         }
-    } AtPage:self.page WithSize:self.size];
+    } withPage:self.page size:self.size category:self.category state:self.state];
 }
 
 #pragma mark - table view data source

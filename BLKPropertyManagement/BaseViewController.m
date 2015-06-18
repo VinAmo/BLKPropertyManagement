@@ -9,10 +9,6 @@
 #import "HTTPDataFetcher.h"
 #import "BaseViewController.h"
 
-@interface BaseViewController () <UITableViewDataSource, UITableViewDelegate>
-
-@end
-
 @implementation BaseViewController
 
 - (void)viewDidLoad {
@@ -32,7 +28,7 @@
     menuButton.layer.cornerRadius = 5.f;
     menuButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     menuButton.contentEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 0);
-    [menuButton setTitle:@"全部" forState:UIControlStateNormal];
+    [menuButton setTitle:@"筛选" forState:UIControlStateNormal];
     [menuButton setTitleColor:[UIColor colorWithRed:30/255.f green:144/255.f blue:255/255.f alpha:1] forState:UIControlStateNormal];
     [menuButton addTarget:self action:@selector(handleDropDownMenu) forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:menuButton];
@@ -57,18 +53,19 @@
     _dropDownMenu.delegate = self;
     [self.view addSubview:_dropDownMenu];
     
-    _page = 1; // default
-    _size = 10; // default
+    // defalut parameters
+    _page = 1;
+    _size = 10;
+    _category = @"ALL";
+    _type = @"FEEDBACK";
+    _state = @"";
+    _person = @"";
     
+    [self loadDataFilter];
     [self loadData];
 }
 
-- (NSMutableArray *)dataFilter {
-    if (!_dataFilter) {
-        _dataFilter = [[NSMutableArray alloc] init];
-    }
-    return _dataFilter;
-}
+#pragma mark - properties
 
 - (NSMutableArray *)data {
     if (!_data) {
@@ -77,17 +74,41 @@
     return _data;
 }
 
-#pragma mark - functions
-
-- (void)loadData{
-    [HTTPDataFetcher setCookies];
-    [self.activityIndicatorView startAnimating];
-    [self fetch];
-    [HTTPDataFetcher deleteCookies];
-    self.page++;
+- (NSMutableDictionary *)dataFilter {
+    if (!_dataFilter) {
+        _dataFilter = [[NSMutableDictionary alloc] init];
+    }
+    return _dataFilter;
 }
 
-- (void)fetch {
+- (NSString *)category {
+    if (!_category) {
+        _category = [NSString string];
+    }
+    return _category;
+}
+
+- (NSString *)state {
+    if (!_state) {
+        _state = [NSString string];
+    }
+    return _state;
+}
+
+- (NSString *)person {
+    if (!_person) {
+        _person = [NSString string];
+    }
+    return _person;
+}
+
+#pragma mark - functions
+
+- (void)loadDataFilter {
+    // coveted in subclass
+}
+
+- (void)loadData{
     // covered in subclass
 }
 
@@ -108,15 +129,19 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     if (scrollView.contentOffset.y >= scrollView.contentSize.height - scrollView.bounds.size.height) {
-        [self loadData];
+        if ([scrollView isEqual:self.tableView]) {
+            [self loadData];
+        }
     }
 }
 
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.bounds.size.height) {
-        NSLog(@"Dragging finished.");
-    }
-}
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+//    if (scrollView.contentOffset.y > scrollView.contentSize.height - scrollView.bounds.size.height) {
+//        if ([scrollView isEqual:self.tableView]) {
+//            NSLog(@"Dragging finished.");
+//        }
+//    }
+//}
 
 #pragma mark - table view data source
 
@@ -148,7 +173,7 @@
         return 40;
     }
     else if ([tableView isEqual:self.tableView]) {
-        return 200;
+        return 280;
     }
     else {
         return 30; // default

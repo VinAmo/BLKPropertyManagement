@@ -71,20 +71,22 @@
     _passwordTF.delegate = self;
     [self.view addSubview:_passwordTF];
     
-    UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeSystem];
     loginButton.frame = CGRectMake(0, 0, 100, 40);
     loginButton.center = CGPointMake(self.view.center.x - 80, CGRectGetMaxY(passwordLabel.frame) + 50);
     loginButton.backgroundColor = [UIColor grayColor];
+    loginButton.tintColor = [UIColor whiteColor];
     loginButton.layer.masksToBounds = YES;
     loginButton.layer.cornerRadius = 5.f;
     [loginButton setTitle:@"Sign in" forState:UIControlStateNormal];
     [loginButton addTarget:self action:@selector(login) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:loginButton];
     
-    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIButton *cancelButton = [UIButton buttonWithType:UIButtonTypeSystem];
     cancelButton.frame = CGRectMake(0, 0, 100, 40);
     cancelButton.center = CGPointMake(self.view.center.x + 80, CGRectGetMaxY(passwordLabel.frame) + 50);
     cancelButton.backgroundColor = [UIColor grayColor];
+    cancelButton.tintColor = [UIColor whiteColor];
     cancelButton.layer.masksToBounds = YES;
     cancelButton.layer.cornerRadius = 5.f;
     [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];

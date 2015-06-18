@@ -10,6 +10,6 @@
 
 @interface ProcessData : NSObject
 
-
++ (NSDictionary *)resultFromSource:(NSDictionary *)source;
 
 @end

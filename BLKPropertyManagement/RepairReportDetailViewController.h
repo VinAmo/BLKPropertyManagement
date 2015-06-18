@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "RepairReportMessage.h"
 
 @interface RepairReportDetailViewController : UIViewController
+
+@property (strong, nonatomic) RepairReportMessage *message;
 
 @end

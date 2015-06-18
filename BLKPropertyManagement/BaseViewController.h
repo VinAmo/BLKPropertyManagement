@@ -9,17 +9,22 @@
 #import <UIKit/UIKit.h>
 #import "DropDownMenu.h"
 
-@interface BaseViewController : UIViewController
+@interface BaseViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) UIActivityIndicatorView *activityIndicatorView;
 @property (strong, nonatomic) DropDownMenu *dropDownMenu;
 
-@property (strong, nonatomic) NSMutableArray *dataFilter;
+@property (strong, nonatomic) NSMutableDictionary *dataFilter;
 @property (strong, nonatomic) NSMutableArray *data;
 @property (assign, nonatomic) NSUInteger page;
 @property (assign, nonatomic) NSUInteger size;
+@property (copy, nonatomic) NSString *category;
+@property (copy, nonatomic) NSString *type; // for feedback category
+@property (copy, nonatomic) NSString *state;
+@property (copy, nonatomic) NSString *person;
 
-- (void)fetch; // subclass need realize
+- (void)loadDataFilter;
+- (void)loadData; // required to implement in subclass
 
 @end

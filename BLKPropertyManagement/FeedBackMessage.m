@@ -10,4 +10,23 @@
 
 @implementation FeedBackMessage
 
+- (void)setState:(NSString *)state {
+    if (_state != state) {
+        _state = state;
+    }
+    
+    if ([_state isEqualToString:@"PROCESSED"]) {
+        _state = @"已处理";
+    }
+    else if ([_state isEqualToString:@"WAITPROCESS"]) {
+        _state = @"等待处理";
+    }
+    else if ([_state isEqualToString:@"PROCESSING"]) {
+        _state = @"处理中";
+    }
+    else {
+        _state = @"";
+    }
+}
+
 @end

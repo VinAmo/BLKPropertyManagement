@@ -14,6 +14,10 @@
 @property (strong, nonatomic) CALayer *topDivisionLayer;
 @property (strong, nonatomic) CALayer *bottomDivisionLayer;
 @property (strong, nonatomic) UILabel *headerLeftLabel;
+@property (strong, nonatomic) UILabel *headerLeftAssociateLabel;
 @property (strong, nonatomic) UILabel *headerRightLabel;
+@property (strong, nonatomic) UILabel *headerRightAssociateLabel;
+@property (strong, nonatomic) UIButton *leftButton;
+@property (strong, nonatomic) UIButton *rightButton;
 
 @end

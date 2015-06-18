@@ -17,17 +17,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     self.navigationItem.title = @"反馈详情";
     
     self.view = [[UIView alloc] init];
     self.view.frame = [[UIScreen mainScreen] bounds];
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UILabel *titleLabel = [[UILabel alloc] init];
-    [titleLabel setFont:[UIFont fontWithName:nil size:20]];
-    [self.view addSubview:titleLabel];
-    
     UILabel *feedbackLabel = [[UILabel alloc] init];
+//    feedbackLabel.backgroundColor = [UIColor grayColor];
+    feedbackLabel.numberOfLines = 0;
+    feedbackLabel.lineBreakMode = NSLineBreakByCharWrapping;
     feedbackLabel.text = @"反馈内容：";
     [self.view addSubview:feedbackLabel];
     
@@ -47,12 +47,21 @@
     phoneNumberLabel.text = @"联系方式：";
     [self.view addSubview:phoneNumberLabel];
     
-    titleLabel.frame = CGRectMake(20, 0, self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
-    feedbackLabel.frame = CGRectMake(20, CGRectGetMaxY(titleLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
-    addressLabel.frame = CGRectMake(20, CGRectGetMaxY(feedbackLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
-    personLabel.frame = CGRectMake(20, CGRectGetMaxY(addressLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
-    timeLabel.frame = CGRectMake(20, CGRectGetMaxY(personLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
-    phoneNumberLabel.frame = CGRectMake(20, CGRectGetMaxY(timeLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.1);
+    feedbackLabel.text = [feedbackLabel.text stringByAppendingString:self.message.feedback];
+    addressLabel.text = [addressLabel.text stringByAppendingString:self.message.address];
+    personLabel.text = [personLabel.text stringByAppendingString:self.message.person];
+    timeLabel.text = [timeLabel.text stringByAppendingString:self.message.time];
+    phoneNumberLabel.text = [phoneNumberLabel.text stringByAppendingString:self.message.phoneNumber];
+    
+    CGRect feedbackLabelRect = [feedbackLabel.text boundingRectWithSize:CGSizeMake(self.view.bounds.size.width - 40 , 500)
+                                                                 options:NSStringDrawingUsesLineFragmentOrigin
+                                                              attributes:[NSDictionary dictionaryWithObjectsAndKeys:feedbackLabel.font, NSFontAttributeName, nil] context:nil];
+    
+    feedbackLabel.frame = CGRectMake(20, 20, self.view.bounds.size.width - 40, feedbackLabelRect.size.height + 10);
+    addressLabel.frame = CGRectMake(20, CGRectGetMaxY(feedbackLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.05);
+    personLabel.frame = CGRectMake(20, CGRectGetMaxY(addressLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.05);
+    timeLabel.frame = CGRectMake(20, CGRectGetMaxY(personLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.05);
+    phoneNumberLabel.frame = CGRectMake(20, CGRectGetMaxY(timeLabel.frame), self.view.bounds.size.width - 40, self.view.bounds.size.height * 0.05);
 }
 
 @end

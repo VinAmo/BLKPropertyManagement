@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "FeedBackMessage.h"
 
 @interface FeedbackDetailViewController : UIViewController
+
+@property (strong, nonatomic) FeedBackMessage *message;
 
 @end

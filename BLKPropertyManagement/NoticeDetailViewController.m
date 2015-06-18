@@ -21,6 +21,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     UIWebView *webView = [[UIWebView alloc] init];
     webView.frame = self.view.bounds;
     webView.delegate = self;

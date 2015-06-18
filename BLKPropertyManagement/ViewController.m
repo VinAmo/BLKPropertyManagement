@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "SignInViewController.h"
 #import "AccountViewController.h"
 #import "CommunityNoticeViewController.h"
 #import "RepairReportManagementViewController.h"
@@ -27,7 +28,7 @@
     
     self.navigationItem.title = @"物业管理";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"账户" style:UIBarButtonItemStylePlain target:self action:@selector(showAccountViewController)];
-    
+    [self.navigationController setTabBarItem:[[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemFeatured tag:0]];
     UIButton *communityNoticeButton = [UIButton buttonWithType:UIButtonTypeCustom];
     communityNoticeButton.frame = CGRectMake(0, 0, 40, 40);
     communityNoticeButton.center = CGPointMake(self.view.center.x - 60, 300);
@@ -57,6 +58,14 @@
     [self.view addSubview:feedbackButton];
     
 //    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"access"];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    BOOL access = [[NSUserDefaults standardUserDefaults] boolForKey:@"access"];
+    if (!access) {
+        [self.navigationController pushViewController:[[SignInViewController alloc] init] animated:YES];
+        [self.navigationController setNavigationBarHidden:YES];
+    }
 }
 
 - (void)showAccountViewController {

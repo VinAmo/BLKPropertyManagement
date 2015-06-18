@@ -8,17 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@class DropDownMenu;
-
-@protocol DropDownMenuDelegate <NSObject>
-
-- (void)dropDownMenu:(DropDownMenu *)dropDownMenu didSelectRowAtIndex:(NSUInteger)index;
-
-@end
-
 @interface DropDownMenu : UITableView
-
-@property (strong, nonatomic) id <DropDownMenuDelegate> delegate;
 
 @property (assign, nonatomic, getter=isVisible) BOOL visible;
 

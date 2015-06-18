@@ -34,12 +34,13 @@
         [self addSubview:_headerContainerView];
         
         _headerLeftLabel = [[UILabel alloc] init];
+        
         _headerLeftLabel.text = @"失效时间：";
         _headerLeftLabel.textColor = [UIColor colorWithRed:30/255.f green:144/255.f blue:255/255.f alpha:1];
         [_headerContainerView addSubview:_headerLeftLabel];
         
         _headerRightLabel = [[UILabel alloc] init];
-        _headerRightLabel.textAlignment = NSTextAlignmentRight;
+        _headerRightLabel.adjustsFontSizeToFitWidth = YES;
         _headerRightLabel.text = @"是否置顶：";
         _headerRightLabel.textColor = [UIColor colorWithRed:30/255.f green:144/255.f blue:255/255.f alpha:1];
         [_headerContainerView addSubview:_headerRightLabel];
@@ -83,11 +84,16 @@
     self.navigationItem.title = @"社区公告";
     UIBarButtonItem *addBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddNoticeViewController)];
     self.navigationItem.rightBarButtonItem = addBarButtonItem;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+    self.tableView.separatorInset = UIEdgeInsetsZero;
+    self.tableView.layoutMargins = UIEdgeInsetsZero;
 }
 
 #pragma mark - functions
 
-- (void)fetch {
+- (void)loadData {
+    [HTTPDataFetcher setCookies];
+    [self.activityIndicatorView startAnimating];
     [HTTPDataFetcher fetchCommunityNoticeMessages:^(id messages) {
         if ([messages isKindOfClass:[NSArray class]]) {
             [messages enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
@@ -102,7 +108,9 @@
             [self.activityIndicatorView stopAnimating];
             [self.tableView reloadData];
         }
-    } AtPage:self.page WithSize:self.size];
+    } withPage:self.page size:self.size];
+    [HTTPDataFetcher deleteCookies];
+    self.page++;
 }
 
 - (void)showAddNoticeViewController {
