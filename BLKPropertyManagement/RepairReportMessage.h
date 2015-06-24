@@ -12,12 +12,18 @@
 
 @property (copy, nonatomic) NSString *identifier;
 @property (copy, nonatomic) NSString *orderNumber;
+@property (copy, nonatomic) NSString *priority;
 @property (copy, nonatomic) NSString *state;
 @property (copy, nonatomic) NSString *type;
+@property (copy, nonatomic) NSString *depiction;
+@property (copy, nonatomic) NSString *evaluation;
+@property (copy, nonatomic) NSString *completeTime;
 @property (copy, nonatomic) NSString *reportContent;
+@property (copy, nonatomic) NSString *repairContent;
 @property (copy, nonatomic) NSString *buildingNumber;
 @property (copy, nonatomic) NSString *reporter;
 @property (copy, nonatomic) NSString *reportTime;
+@property (copy, nonatomic) NSString *appointTime;
 @property (copy, nonatomic) NSString *phoneNumber;
 @property (copy, nonatomic) NSString *repairer;
 

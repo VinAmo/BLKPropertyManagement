@@ -11,6 +11,8 @@
 
 @implementation HTTPDataFetcher
 
+#pragma mark - cookies
+
 + (void)setCookies {
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     NSString *token = [userDefaults stringForKey:@"token"];
@@ -68,9 +70,40 @@
     
 }
 
+#pragma mark - login
+
++ (void)fetchLoginMessages:(void (^)(id))callback withUsername:(NSString *)username password:(NSString *)password {
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"AppLogin/login.do"];
+    NSDictionary *parameters = @{ @"loginName": username, @"loginPwd": password };
+    [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        callback(responseObject);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"%@", error);
+        [[[UIAlertView alloc] initWithTitle:@"提示"
+                                    message:@"服务器提了一个问题！"
+                                   delegate:self
+                          cancelButtonTitle:@"呵呵"
+                          otherButtonTitles:nil] show];
+    }];
+}
+
+#pragma mark - fetch filter messages
+
 + (void)fetchRepairReportFilterMessages:(void (^)(id))callback {
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/repairState.do"];
+    NSDictionary *parameters = @{  };
+    [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        callback(responseObject);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
++ (void)fetchMaintenanceFilterMessages:(void (^)(id))callback {
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/findEmployee.do"];
     NSDictionary *parameters = @{  };
     [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         callback(responseObject);
@@ -90,11 +123,9 @@
     }];
 }
 
+#pragma mark - fetch content messages
+
 + (void)fetchCommunityNoticeMessages:(void (^)(id))callback withPage:(NSUInteger)page size:(NSUInteger)size {
-//    [[[NSHTTPCookieStorage sharedHTTPCookieStorage] cookies] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//        NSLog(@"Cookie :%@\n", obj);
-//    }];
-    
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"AppNotice/findNoticeBySearch.do"];
     NSDictionary *parameters = @{ @"page": @(page), @"pagesize": @(size), @"Category": @"小区公告", @"typeCode": @"1001" };
@@ -102,6 +133,11 @@
         callback(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@", error);
+        [[[UIAlertView alloc] initWithTitle:@"提示"
+                                    message:@"服务器提了一个问题！"
+                                   delegate:self
+                          cancelButtonTitle:@"呵呵"
+                          otherButtonTitles:nil] show];
     }];
     
 //    NSString *parameters = [NSString stringWithFormat:@"Category=小区公告&typeCode=1001&page=%lu&pagesize=%lu", page, size];
@@ -137,10 +173,15 @@
         callback(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@", error);
+        [[[UIAlertView alloc] initWithTitle:@"提示"
+                                    message:@"服务器提了一个问题！"
+                                   delegate:self
+                          cancelButtonTitle:@"呵呵"
+                          otherButtonTitles:nil] show];
     }];
 }
 
-+ (void)fetchMaintenanceMessages:(void (^)(id))callback withPage:(NSUInteger)page size:(NSUInteger)size category:(NSString *)category state:(NSString *)state {
++ (void)fetchMaintenanceMessages:(void (^)(id))callback withPage:(NSUInteger)page size:(NSUInteger)size category:(NSString *)category {
     [HTTPDataFetcher fetchRepairReportMessages:callback withPage:page size:size category:category state:@"PROCESS"];
 }
 
@@ -149,16 +190,45 @@
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"AppFeedBack/findFeedbackBySearch.do"];
     NSDictionary *parameters = @{ @"page": @(page), @"pagesize": @(size), @"typeCode": category, @"ownerName": person };
     [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        callback(responseObject);NSLog(@"%@", responseObject);
+        callback(responseObject);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"%@", error);
+        [[[UIAlertView alloc] initWithTitle:@"提示"
+                                    message:@"服务器提了一个问题！"
+                                   delegate:self
+                          cancelButtonTitle:@"呵呵"
+                          otherButtonTitles:nil] show];
+    }];
+}
+
+#pragma mark - send operation messages
+
++ (void)fetchRepairReportCompleteMessages:(void (^)(id))callback withReportIdentifier:(NSString *)identifier depiction:(NSString *)depiction time:(NSString *)time evaluation:(NSString *)evaluation {
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/completeRepairByPkno.do"];
+    NSDictionary *parameters = @{ @"repairPkno": identifier, @"maintenanceDescribe": depiction, @"completeTime": time, @"isqualifiedFlag": evaluation };
+    [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        callback(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@", error);
     }];
 }
 
-+ (void)fetchRepairReportConfirmMessages:(void (^)(id))callback withReportIdentifier:(NSString *)identifier content:(NSString *)content time:(NSString *)time {
++ (void)fetchRepairReportConfirmMessages:(void (^)(id))callback withReportIdentifier:(NSString *)identifier priority:(NSString *)priority content:(NSString *)content {
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/completeRepairByPkno.do"];
-    NSDictionary *parameters = @{ @"repairPkno": identifier, @"maintenanceDescribe": content, @"completeTime": time };
+    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/throughRepairByPkno.do"];
+    NSDictionary *parameters = @{ @"repairPkno": identifier, @"typeCode": priority, @"repairDescribe": content };
+    [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        callback(responseObject);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
++ (void)fetchRepairReportChangePriorityMessages:(void (^)(id))callback withReportIdentifier:(NSString *)identifier priority:(NSString *)priority {
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/updateRepairLevel.do"];
+    NSDictionary *parameters = @{ @"repairPkno": identifier, @"typeCode": priority };
     [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         callback(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
@@ -168,8 +238,41 @@
 
 + (void)fetchRepairReportCancelMessages:(void (^)(id))callback withReportIdentifier:(NSString *)identifier {
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/findRepairBySearch.do"];
+    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/stopRepairByPkno.do"];
     NSDictionary *parameters = @{ @"repairPkno": identifier };
+    [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        callback(responseObject);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
++ (void)fetchRepairReportImageMessages:(void (^)(id))callback withImageName:(NSString *)name {
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"showImage.do"];
+    NSDictionary *parameters = @{ @"imgAddress": name };
+    [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        callback(responseObject);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
++ (void)fetchFeedbackConfirmProcessMessages:(void (^)(id))callback withFeedbackIdentifier:(NSString *)identifier {
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"AppFeedBack/updateFeedbackState.do"];
+    NSDictionary *parameters = @{ @"feedbackPkno": identifier };
+    [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        callback(responseObject);
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        NSLog(@"%@", error);
+    }];
+}
+
++ (void)fetchFeedbackCancelMessages:(void (^)(id))callback withFeedbackIdentifier:(NSString *)identifier {
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"AppFeedBack/deleteFeedbackByfeedbackPkno.do"];
+    NSDictionary *parameters = @{ @"feedbackPkno": identifier };
     [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         callback(responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {

@@ -10,6 +10,7 @@
 
 @interface FeedBackMessage : NSObject
 
+@property (copy, nonatomic) NSString *identifier;
 @property (copy, nonatomic) NSString *category;
 @property (copy, nonatomic) NSString *state;
 @property (copy, nonatomic) NSString *title;

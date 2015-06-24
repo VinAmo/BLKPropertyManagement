@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MaintenanceMessage.h"
 
 @interface MaintenanceDetailViewController : UIViewController
+
+@property (strong, nonatomic) MaintenanceMessage *message;
 
 @end

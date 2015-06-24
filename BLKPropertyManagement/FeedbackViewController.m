@@ -73,6 +73,9 @@
 
 @interface FeedbackViewController ()
 
+@property (strong, nonatomic) UIAlertView *confirmProcessAlertView;
+@property (strong, nonatomic) UIAlertView *cancelFeedbackAlertView;
+
 @end
 
 @implementation FeedbackViewController
@@ -81,7 +84,12 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.navigationItem.title = @"意见反馈";
-    
+}
+
+#pragma mark - functions
+
+- (void)loadDataFilter {
+    [HTTPDataFetcher setCookies];
     [HTTPDataFetcher fetchFeedbackFilterMessages:^(id messages) {
         if ([messages isKindOfClass:[NSArray class]]) {
             [messages enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
@@ -90,12 +98,10 @@
             [self.dropDownMenu reloadData];
         }
     }];
+    [HTTPDataFetcher deleteCookies];
 }
 
-#pragma mark - functions
-
 - (void)loadData {
-    NSLog(@"%@", self.type);
     [self.activityIndicatorView startAnimating];
     [HTTPDataFetcher setCookies];
     [HTTPDataFetcher fetchFeedbackMessages:^(id messages) {
@@ -103,6 +109,7 @@
             [[messages valueForKey:@"Rows"] enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
                 NSDictionary *result = [ProcessData resultFromSource:obj];
                 FeedBackMessage *message = [[FeedBackMessage alloc] init];
+                message.identifier = [result valueForKey:@"feedbackPkno"];
                 message.category = [result valueForKey:@"shortDesc"];
                 message.state = [result valueForKey:@"state"];
                 message.feedback = [result valueForKey:@"describeContent"];
@@ -115,22 +122,48 @@
             }];
             [self.activityIndicatorView stopAnimating];
             [self.tableView reloadData];
+            
+            if (self.data.count == 0) {
+                [[[UIAlertView alloc] initWithTitle:@"提示"
+                                            message:@"服务器提了一个问题！"
+                                           delegate:self
+                                  cancelButtonTitle:@"呵呵"
+                                  otherButtonTitles:nil] show];
+            }
         }
     } withPage:self.page size:self.size category:self.type person:self.person];
     [HTTPDataFetcher deleteCookies];
     self.page++;
 }
 
-- (void)confirmFeedback {
+- (void)confirmProcess:(UIButton *)sender {
+    self.confirmProcessAlertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                              message:@"是否确定处理反馈？"
+                                                             delegate:self
+                                                    cancelButtonTitle:@"取消"
+                                                    otherButtonTitles:@"确定", nil];
+    [self.confirmProcessAlertView show];
     
+    if ([sender.superview isKindOfClass:[FeedbackTableViewCell class]]) {
+        FeedbackTableViewCell *cell = (FeedbackTableViewCell *)sender.superview;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        self.confirmProcessAlertView.tag = indexPath.item;
+    }
 }
 
-- (void)cancelFeedback {
-    [[[UIAlertView alloc] initWithTitle:@"提示"
-                                message:@"是否取消反馈？"
-                               delegate:self
-                      cancelButtonTitle:@"取消"
-                      otherButtonTitles:@"确定", nil] show];
+- (void)cancelFeedback:(UIButton *)sender {
+    self.cancelFeedbackAlertView = [[UIAlertView alloc] initWithTitle:@"提示"
+                                                         message:@"是否确定取消反馈？"
+                                                        delegate:self
+                                               cancelButtonTitle:@"取消"
+                                               otherButtonTitles:@"确定", nil];
+    [self.cancelFeedbackAlertView show];
+    
+    if ([sender.superview isKindOfClass:[FeedbackTableViewCell class]]) {
+        FeedbackTableViewCell *cell = (FeedbackTableViewCell *)sender.superview;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+        self.cancelFeedbackAlertView.tag = indexPath.item;
+    }
 }
 
 #pragma mark - table view data source
@@ -171,11 +204,11 @@
         if ([message.state isEqualToString:@"等待处理"]) {
             [subCell.leftButton setHidden:NO];
             [subCell.leftButton setTitle:@"确认处理" forState:UIControlStateNormal];
-            [subCell.leftButton addTarget:self action:@selector(confirmFeedback) forControlEvents:UIControlEventTouchUpInside];
+            [subCell.leftButton addTarget:self action:@selector(confirmProcess:) forControlEvents:UIControlEventTouchUpInside];
             
             [subCell.rightButton setHidden:NO];
             [subCell.rightButton setTitle:@"删除" forState:UIControlStateNormal];
-            [subCell.rightButton addTarget:self action:@selector(cancelFeedback) forControlEvents:UIControlEventTouchUpInside];
+            [subCell.rightButton addTarget:self action:@selector(cancelFeedback:) forControlEvents:UIControlEventTouchUpInside];
         }
         else if ([message.state isEqualToString:@"处理中"]) {
             [subCell.leftButton setHidden:NO];
@@ -184,6 +217,11 @@
         else if ([message.state isEqualToString:@"已处理"]) {
             [subCell.leftButton setHidden:NO];
             [subCell.leftButton setTitle:@"已处理" forState:UIControlStateNormal];
+            
+            [subCell.rightButton setHidden:NO];
+            [subCell.rightButton setTitle:@"删除" forState:UIControlStateNormal];
+            [subCell.rightButton addTarget:self action:@selector(cancelFeedback:) forControlEvents:UIControlEventTouchUpInside];
+
         }
         else {
             
@@ -197,6 +235,18 @@
 }
 
 #pragma mark - table view delegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([tableView isEqual:self.dropDownMenu]) {
+        return 40;
+    }
+    else if ([tableView isEqual:self.tableView]) {
+        return 200;
+    }
+    else {
+        return 30; // default
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([tableView isEqual:self.dropDownMenu]) {
@@ -221,13 +271,29 @@
 #pragma mark - alert view delegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    FeedBackMessage *message = self.data[alertView.tag];
     switch (buttonIndex) {
         case 0:
             NSLog(@"取消");
             break;
             
         case 1:
-            NSLog(@"确定");
+            if ([alertView isEqual:self.confirmProcessAlertView]) {
+                [HTTPDataFetcher setCookies];
+                [HTTPDataFetcher fetchFeedbackConfirmProcessMessages:^(id messages) {
+                    NSLog(@"%@", messages);
+                } withFeedbackIdentifier:message.identifier];
+                [HTTPDataFetcher deleteCookies];
+                [self loadData];
+            }
+            if ([alertView isEqual:self.cancelFeedbackAlertView]) {
+                [HTTPDataFetcher setCookies];
+                [HTTPDataFetcher fetchFeedbackCancelMessages:^(id messages) {
+                    NSLog(@"%@", messages);
+                } withFeedbackIdentifier:message.identifier];
+                [HTTPDataFetcher deleteCookies];
+                [self loadData];
+            }
             break;
             
         default:

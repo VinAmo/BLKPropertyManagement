@@ -16,7 +16,7 @@
     }
     
     if ([_state isEqualToString:@"WAITFORAUDIT"]) {
-        _state = @"等待审核";
+        _state = @"待确认";
     }
     else if ([_state isEqualToString:@"WAITP"]) {
         _state = @"等待配件";
@@ -25,16 +25,16 @@
         _state = @"返回物管";
     }
     else if ([_state isEqualToString:@"WAITPROCESS"]) {
-        _state = @"已提交工程部";
+        _state = @"已提交";
     }
     else if ([_state isEqualToString:@"PROCESSING"]) {
-        _state = @"已安排维修";
+        _state = @"维修中";
     }
     else if ([_state isEqualToString:@"PROCESSED"]) {
         _state = @"已完成";
     }
     else if ([_state isEqualToString:@"PROSTOP"]) {
-        _state = @"已关闭";
+        _state = @"已取消";
     }
     else {
         _state = @"未知";

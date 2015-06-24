@@ -12,6 +12,9 @@
 #import "BaseTableViewCell.h"
 #import "RepairReportManagementViewController.h"
 #import "RepairReportDetailViewController.h"
+#import "RepairReportCompleteViewController.h"
+#import "RepairReportConfirmViewController.h"
+#import "RepairReportChangePriorityViewController.h"
 
 #pragma mark - Table View Cell
 
@@ -89,20 +92,29 @@
     self.navigationItem.title = @"报修管理";
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    self.page = 1;
+    self.size = 10;
+    [self loadData];
+}
+
 #pragma mark - functions
 
 - (void)loadDataFilter {
+    [HTTPDataFetcher setCookies];
     [HTTPDataFetcher fetchRepairReportFilterMessages:^(id messages) {
         if ([messages isKindOfClass:[NSDictionary class]]) {
             [[messages valueForKey:@"state"] enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
                 [self.dataFilter setValue:[obj valueForKey:@"short_desc"] forKey:[obj valueForKey:@"type_code"]];
             }];
             [[messages valueForKey:@"type"] enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL *stop) {
-                //                [self.dataFilter addObject:[obj valueForKey:@"short_desc"]];
+                
             }];
             [self.dropDownMenu reloadData];
         }
     }];
+    [HTTPDataFetcher deleteCookies];
 }
 
 - (void)loadData {
@@ -115,14 +127,20 @@
                 RepairReportMessage *message = [[RepairReportMessage alloc] init];
                 message.identifier = [result valueForKey:@"repairPkno"];
                 message.orderNumber = [result valueForKey:@"orderNumber"];
+                message.priority = [result valueForKey:@"typeCode"];
                 message.state = [result valueForKey:@"state"];
                 message.type = [result valueForKey:@"category"];
+                message.depiction = [result valueForKey:@"maintenanceDescribe"];
+                message.evaluation = [result valueForKey:@"isqualifiedFlag"];
+                message.depiction = [result valueForKey:@"completeTime"];
                 message.buildingNumber = [result valueForKey:@"houseAdd"];
                 message.reporter = [result valueForKey:@"ownerName"];
                 message.reportContent = [result valueForKey:@"repairContent"];
+                message.repairContent = [result valueForKey:@"repairDescribe"];
                 message.reportTime = [result valueForKey:@"repairTime"];
                 message.phoneNumber = [result valueForKey:@"phone"];
                 message.repairer = [result valueForKey:@"employeeName"];
+                message.appointTime = [result valueForKey:@"appointmentTime"];
                 [self.data  addObject:message];
             }];
             [self.activityIndicatorView stopAnimating];
@@ -141,32 +159,71 @@
     self.page++;
 }
 
-- (void)confirmRepairReport:(id)sender {
+- (void)completeRepairReport:(id)sender {
     UIButton *button = (UIButton *)sender;
+    NSIndexPath *indexPath = [[NSIndexPath alloc] init];
     if ([button.superview isKindOfClass:[RepairReportManagementTableViewCell class]]) {
         RepairReportManagementTableViewCell *cell = (RepairReportManagementTableViewCell *)button.superview;
-        NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-        NSLog(@"%lu", indexPath.item);
+        indexPath = [self.tableView indexPathForCell:cell];
     }
+    
+    RepairReportCompleteViewController *repairReportCompleteViewController = [[RepairReportCompleteViewController alloc] init];
+    repairReportCompleteViewController.message = self.data[indexPath.item];
+    [self.navigationController pushViewController:repairReportCompleteViewController animated:YES];
+}
+
+- (void)confirmRepairReport:(id)sender {
+    UIButton *button = (UIButton *)sender;
+    NSIndexPath *indexPath = [[NSIndexPath alloc] init];
+    if ([button.superview isKindOfClass:[RepairReportManagementTableViewCell class]]) {
+        RepairReportManagementTableViewCell *cell = (RepairReportManagementTableViewCell *)button.superview;
+        indexPath = [self.tableView indexPathForCell:cell];
+    }
+    
+    RepairReportConfirmViewController *repairReportConfirmViewController = [[RepairReportConfirmViewController alloc] init];
+    repairReportConfirmViewController.message = self.data[indexPath.item];
+    [self.navigationController pushViewController:repairReportConfirmViewController animated:YES];
+}
+
+- (void)changePriority:(id)sender {
+    UIButton *button = (UIButton *)sender;
+    NSIndexPath *indexPath = [[NSIndexPath alloc] init];
+    if ([button.superview isKindOfClass:[RepairReportManagementTableViewCell class]]) {
+        RepairReportManagementTableViewCell *cell = (RepairReportManagementTableViewCell *)button.superview;
+        indexPath = [self.tableView indexPathForCell:cell];
+    }
+    
+    RepairReportChangePriorityViewController *repairReportChangePriorityViewController = [[RepairReportChangePriorityViewController alloc] init];
+    repairReportChangePriorityViewController.message = self.data[indexPath.item];
+    [self.navigationController pushViewController:repairReportChangePriorityViewController animated:YES];
 }
 
 - (void)cancelRepairReport:(id)sender {
+    UIAlertView *alertView =  [[UIAlertView alloc] initWithTitle:@"提示"
+                                                         message:@"是否确定取消报修？"
+                                                        delegate:self
+                                               cancelButtonTitle:@"取消"
+                                               otherButtonTitles:@"确定", nil];
+    [alertView show];
+    
     UIButton *button = (UIButton *)sender;
     if ([button.superview isKindOfClass:[RepairReportManagementTableViewCell class]]) {
         RepairReportManagementTableViewCell *cell = (RepairReportManagementTableViewCell *)button.superview;
         NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-        NSLog(@"%lu", indexPath.item);
+        alertView.tag = indexPath.item;
     }
-    
-    
-    [[[UIAlertView alloc] initWithTitle:@"提示"
-                               message:@"是否确定取消报修？"
-                              delegate:self
-                     cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil] show];
 }
 
-- (void)showRepairReportDetail {
-    
+- (void)showRepairReportDetail:(id)sender {
+    UIButton *button = (UIButton *)sender;
+    NSIndexPath *indexPath = [[NSIndexPath alloc] init];
+    if ([button.superview isKindOfClass:[RepairReportManagementTableViewCell class]]) {
+        RepairReportManagementTableViewCell *cell = (RepairReportManagementTableViewCell *)button.superview;
+        indexPath = [self.tableView indexPathForCell:cell];
+    }
+    RepairReportDetailViewController *repairReportDetailViewController = [[RepairReportDetailViewController alloc] init];
+    repairReportDetailViewController.message = self.data[indexPath.item];
+    [self.navigationController pushViewController:repairReportDetailViewController animated:YES];
 }
 
 #pragma mark - table view data source
@@ -205,38 +262,44 @@
         subCell.reportTimeLabel.text = [subCell.reportTimeLabel.text stringByAppendingString:message.reportTime];
         subCell.phoneNumberLabel.text = [subCell.phoneNumberLabel.text stringByAppendingString:message.phoneNumber];
         
-        if ([message.state isEqualToString:@"等待审核"]) {
+        if ([message.state isEqualToString:@"待确认"]) {
             [subCell.leftButton setHidden:NO];
             [subCell.leftButton setTitle:@"确认申请" forState:UIControlStateNormal];
             [subCell.leftButton addTarget:self action:@selector(confirmRepairReport:) forControlEvents:UIControlEventTouchUpInside];
-            
             [subCell.rightButton setHidden:NO];
             [subCell.rightButton setTitle:@"取消维修" forState:UIControlStateNormal];
             [subCell.rightButton addTarget:self action:@selector(cancelRepairReport:) forControlEvents:UIControlEventTouchUpInside];
         }
-        else if ([message.state isEqualToString:@"等待配件"]) {
-            
-        }
         else if ([message.state isEqualToString:@"返回物管"]) {
             [subCell.leftButton setHidden:NO];
-            [subCell.leftButton setTitle:@"取消维修" forState:UIControlStateNormal];
-            [subCell.leftButton addTarget:self action:@selector(cancelRepairReport:) forControlEvents:UIControlEventTouchUpInside];
+            [subCell.leftButton setBackgroundColor:[UIColor redColor]];
+            [subCell.leftButton setTitle:@"不修原因" forState:UIControlStateNormal];
+            [subCell.leftButton addTarget:self action:@selector(showRepairReportDetail:) forControlEvents:UIControlEventTouchUpInside];
+            [subCell.rightButton setHidden:NO];
+            [subCell.rightButton setTitle:@"取消维修" forState:UIControlStateNormal];
+            [subCell.rightButton addTarget:self action:@selector(cancelRepairReport:) forControlEvents:UIControlEventTouchUpInside];
         }
-        else if ([message.state isEqualToString:@"已提交工程部"]) {
-            
+        else if ([message.state isEqualToString:@"已提交"]) {
+            [subCell.leftButton setHidden:NO];
+            [subCell.leftButton setBackgroundColor:[UIColor yellowColor]];
+            [subCell.leftButton setTitle:@"修改等级" forState:UIControlStateNormal];
+            [subCell.leftButton addTarget:self action:@selector(changePriority:) forControlEvents:UIControlEventTouchUpInside];
+            [subCell.rightButton setHidden:NO];
+            [subCell.rightButton setTitle:@"取消维修" forState:UIControlStateNormal];
+            [subCell.rightButton addTarget:self action:@selector(cancelRepairReport:) forControlEvents:UIControlEventTouchUpInside];
         }
-        else if ([message.state isEqualToString:@"已安排维修"]) {
-            
+        else if ([message.state isEqualToString:@"维修中"] || [message.state isEqualToString:@"等待配件"]) {
+            [subCell.leftButton setHidden:NO];
+            [subCell.leftButton setTitle:@"确认完成" forState:UIControlStateNormal];
+            [subCell.leftButton addTarget:self action:@selector(completeRepairReport:) forControlEvents:UIControlEventTouchUpInside];
+            [subCell.rightButton setHidden:NO];
+            [subCell.rightButton setTitle:@"取消维修" forState:UIControlStateNormal];
+            [subCell.rightButton addTarget:self action:@selector(cancelRepairReport:) forControlEvents:UIControlEventTouchUpInside];
         }
-        else if ([message.state isEqualToString:@"已完成"]) {
+        else if ([message.state isEqualToString:@"已完成"] || [message.state isEqualToString:@"已取消"]) {
             [subCell.leftButton setHidden:NO];
             [subCell.leftButton setTitle:@"维修单" forState:UIControlStateNormal];
-            [subCell.leftButton addTarget:self action:@selector(showRepairReportDetail) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else if ([message.state isEqualToString:@"已关闭"]) {
-            [subCell.leftButton setHidden:NO];
-            [subCell.leftButton setTitle:@"维修单" forState:UIControlStateNormal];
-            [subCell.leftButton addTarget:self action:@selector(showRepairReportDetail) forControlEvents:UIControlEventTouchUpInside];
+            [subCell.leftButton addTarget:self action:@selector(showRepairReportDetail:) forControlEvents:UIControlEventTouchUpInside];
         }
         else {
             
@@ -274,16 +337,19 @@
 #pragma mark - alert view delegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    RepairReportMessage *message = self.data[alertView.tag];
     switch (buttonIndex) {
         case 0:
             NSLog(@"取消");
             break;
             
         case 1:
-            NSLog(@"确定");
-//            [HTTPDataFetcher fetchRepairReportCancelMessages:^(id messages) {
-//                
-//            } withReportIdentifier:];
+            [HTTPDataFetcher setCookies];
+            [HTTPDataFetcher fetchRepairReportCancelMessages:^(id messages) {
+                NSLog(@"%@", messages);
+            } withReportIdentifier:message.identifier];
+            [HTTPDataFetcher deleteCookies];
+            [self loadData];
             break;
             
         default:

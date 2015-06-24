@@ -10,10 +10,15 @@
 
 @interface MaintenanceMessage : NSObject
 
-@property (copy, nonatomic) NSString *housingType;
+@property (copy, nonatomic) NSString *identifier;
+@property (copy, nonatomic) NSString *orderNumber;
+@property (copy, nonatomic) NSString *state;
+@property (copy, nonatomic) NSString *type;
+@property (copy, nonatomic) NSString *reportContent;
 @property (copy, nonatomic) NSString *buildingNumber;
 @property (copy, nonatomic) NSString *reporter;
-@property (copy, nonatomic) NSString *scheduleTime;
+@property (copy, nonatomic) NSString *reportTime;
 @property (copy, nonatomic) NSString *phoneNumber;
+@property (copy, nonatomic) NSString *repairer;
 
 @end

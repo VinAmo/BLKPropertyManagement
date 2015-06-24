@@ -36,6 +36,7 @@
         _headerLeftLabel = [[UILabel alloc] init];
         
         _headerLeftLabel.text = @"失效时间：";
+        _headerLeftLabel.adjustsFontSizeToFitWidth = YES;
         _headerLeftLabel.textColor = [UIColor colorWithRed:30/255.f green:144/255.f blue:255/255.f alpha:1];
         [_headerContainerView addSubview:_headerLeftLabel];
         
@@ -107,6 +108,14 @@
             }];
             [self.activityIndicatorView stopAnimating];
             [self.tableView reloadData];
+            
+            if (self.data.count == 0) {
+                [[[UIAlertView alloc] initWithTitle:@"提示"
+                                            message:@"服务器提了一个问题！"
+                                           delegate:self
+                                  cancelButtonTitle:@"呵呵"
+                                  otherButtonTitles:nil] show];
+            }
         }
     } withPage:self.page size:self.size];
     [HTTPDataFetcher deleteCookies];
