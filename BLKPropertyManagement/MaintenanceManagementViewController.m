@@ -71,6 +71,8 @@
     self.reportContentLabel.frame = CGRectMake(20, CGRectGetMaxY(self.reporterLabel.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.1);
     self.reportTimeLabel.frame = CGRectMake(20, CGRectGetMaxY(self.reportContentLabel.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.1);
     self.phoneNumberLabel.frame = CGRectMake(20, CGRectGetMaxY(self.reportTimeLabel.frame), self.bounds.size.width - 40, self.bounds.size.height * 0.1);
+    self.leftButton.frame = CGRectMake(20, self.bounds.size.height - 50, 230, 40);
+    self.rightButton.frame = CGRectMake(CGRectGetMaxX(self.leftButton.frame) + 20, CGRectGetMinY(self.leftButton.frame), 100, 40);
 }
 
 @end
@@ -120,6 +122,7 @@
                 message.reportTime = [result valueForKey:@"repairTime"];
                 message.phoneNumber = [result valueForKey:@"phone"];
                 message.repairer = [result valueForKey:@"employeeName"];
+                message.acceptTime = [result valueForKey:@"inputTime"];
                 [self.data  addObject:message];
             }];
             [self.activityIndicatorView stopAnimating];
@@ -203,39 +206,9 @@
         subCell.reportTimeLabel.text = [subCell.reportTimeLabel.text stringByAppendingString:message.reportTime];
         subCell.phoneNumberLabel.text = [subCell.phoneNumberLabel.text stringByAppendingString:message.phoneNumber];
         
-        if ([message.state isEqualToString:@"等待审核"]) {
-            
-        }
-        else if ([message.state isEqualToString:@"等待配件"]) {
-            
-        }
-        else if ([message.state isEqualToString:@"返回物管"]) {
-            [subCell.leftButton setHidden:NO];
-            [subCell.leftButton setBackgroundColor:[UIColor redColor]];
-            [subCell.leftButton setTitle:@"取消维修" forState:UIControlStateNormal];
-            [subCell.leftButton addTarget:self action:@selector(cancelMaintenance:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else if ([message.state isEqualToString:@"已提交工程部"]) {
-            [subCell.leftButton setHidden:NO];
-            [subCell.leftButton setTitle:@"确认维修单" forState:UIControlStateNormal];
-            [subCell.leftButton addTarget:self action:@selector(confirmMaintenance:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else if ([message.state isEqualToString:@"已安排维修"]) {
-            
-        }
-        else if ([message.state isEqualToString:@"已完成"]) {
-            [subCell.leftButton setHidden:NO];
-            [subCell.leftButton setTitle:@"维修单" forState:UIControlStateNormal];
-            [subCell.leftButton addTarget:self action:@selector(showMaintenanceDetail) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else if ([message.state isEqualToString:@"已关闭"]) {
-            [subCell.leftButton setHidden:NO];
-            [subCell.leftButton setTitle:@"维修单" forState:UIControlStateNormal];
-            [subCell.leftButton addTarget:self action:@selector(showMaintenanceDetail) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else {
-            
-        }
+        [subCell.leftButton setHidden:NO];
+        [subCell.leftButton setTitle:[NSString stringWithFormat:@"接单时间：%@", message.acceptTime] forState:UIControlStateNormal];
+        [subCell.leftButton addTarget:self action:@selector(showMaintenanceDetail) forControlEvents:UIControlEventTouchUpInside];
         
         return subCell;
     }

@@ -170,7 +170,7 @@
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/findRepairBySearch.do"];
     NSDictionary *parameters = @{ @"page": @(page), @"pagesize": @(size), @"category": category, @"state": state };
     [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        callback(responseObject);
+        callback(responseObject);NSLog(@"%@", responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@", error);
         [[[UIAlertView alloc] initWithTitle:@"提示"
@@ -208,7 +208,7 @@
     NSString *urlStr = [delegate.servicePort stringByAppendingPathComponent:@"APPRepair/completeRepairByPkno.do"];
     NSDictionary *parameters = @{ @"repairPkno": identifier, @"maintenanceDescribe": depiction, @"completeTime": time, @"isqualifiedFlag": evaluation };
     [[AFHTTPSessionManager manager] POST:urlStr parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-        callback(responseObject);
+        callback(responseObject);NSLog(@"%@", responseObject);
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"%@", error);
     }];

@@ -28,6 +28,7 @@
 		F497FD1E1B27CB4600398531 /* HTTPDataFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = F497FD1D1B27CB4600398531 /* HTTPDataFetcher.m */; };
 		F497FD241B281E5500398531 /* CommunityNoticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F497FD231B281E5500398531 /* CommunityNoticeViewController.m */; };
 		F497FD271B281F5200398531 /* CommunityNotice.m in Sources */ = {isa = PBXBuildFile; fileRef = F497FD261B281F5200398531 /* CommunityNotice.m */; };
+		F4980B0A1B44E3A3003400C0 /* MaintenanceChangeProgressViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4980B091B44E3A3003400C0 /* MaintenanceChangeProgressViewController.m */; };
 		F4C725781B1FE4950005A8C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C725771B1FE4950005A8C7 /* main.m */; };
 		F4C7257B1B1FE4950005A8C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C7257A1B1FE4950005A8C7 /* AppDelegate.m */; };
 		F4C7257E1B1FE4950005A8C7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F4C7257D1B1FE4950005A8C7 /* ViewController.m */; };
@@ -93,6 +94,8 @@
 		F497FD231B281E5500398531 /* CommunityNoticeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunityNoticeViewController.m; sourceTree = "<group>"; };
 		F497FD251B281F5200398531 /* CommunityNotice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommunityNotice.h; sourceTree = "<group>"; };
 		F497FD261B281F5200398531 /* CommunityNotice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommunityNotice.m; sourceTree = "<group>"; };
+		F4980B081B44E3A3003400C0 /* MaintenanceChangeProgressViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MaintenanceChangeProgressViewController.h; sourceTree = "<group>"; };
+		F4980B091B44E3A3003400C0 /* MaintenanceChangeProgressViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaintenanceChangeProgressViewController.m; sourceTree = "<group>"; };
 		F4C725721B1FE4950005A8C7 /* BLKPropertyManagement.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BLKPropertyManagement.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4C725761B1FE4950005A8C7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4C725771B1FE4950005A8C7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -192,6 +195,8 @@
 				F4C725A21B1FF5CF0005A8C7 /* MaintenanceManagementViewController.m */,
 				F484DEAC1B2BD3C100F5C3D7 /* MaintenanceDetailViewController.h */,
 				F484DEAD1B2BD3C100F5C3D7 /* MaintenanceDetailViewController.m */,
+				F4980B081B44E3A3003400C0 /* MaintenanceChangeProgressViewController.h */,
+				F4980B091B44E3A3003400C0 /* MaintenanceChangeProgressViewController.m */,
 			);
 			name = MaintenanceManagement;
 			sourceTree = "<group>";
@@ -437,6 +442,7 @@
 				F497FD271B281F5200398531 /* CommunityNotice.m in Sources */,
 				F484CF491B2ABF0200EC47E9 /* RepairReportMessage.m in Sources */,
 				F497FD1E1B27CB4600398531 /* HTTPDataFetcher.m in Sources */,
+				F4980B0A1B44E3A3003400C0 /* MaintenanceChangeProgressViewController.m in Sources */,
 				F4567C551B2569A5004F1D52 /* AccountViewController.m in Sources */,
 				F4C725A31B1FF5CF0005A8C7 /* MaintenanceManagementViewController.m in Sources */,
 				F46348B21B395A1400244BB1 /* RepairReportConfirmViewController.m in Sources */,

@@ -20,5 +20,6 @@
 @property (copy, nonatomic) NSString *reportTime;
 @property (copy, nonatomic) NSString *phoneNumber;
 @property (copy, nonatomic) NSString *repairer;
+@property (copy, nonatomic) NSString *acceptTime;
 
 @end

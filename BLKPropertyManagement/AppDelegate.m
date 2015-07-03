@@ -37,7 +37,7 @@
     _window.rootViewController = _navigationController;
     [_window makeKeyAndVisible];
     
-    _servicePort = @"http://99b82737.ngrok.io/community_business";
+    _servicePort = @"http://d743d647.ngrok.io/community_business";
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES]; // try
     
     return YES;

@@ -67,6 +67,15 @@
 
 #pragma mark - properties
 
+//@synthesize data = _data;
+//
+//- (void)setData:(NSMutableArray *)data {
+//    if (_data != data) {
+//        _data = data;
+//        [self.tableView reloadData];
+//    }
+//}
+
 - (NSMutableArray *)data {
     if (!_data) {
         _data = [[NSMutableArray alloc] init];

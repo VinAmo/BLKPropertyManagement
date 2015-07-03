@@ -185,7 +185,7 @@
 }
 
 - (void)complete {
-    NSLog(@"%@ %@ %@", self.message.depiction, self.message.completeTime, self.message.evaluation);
+    NSLog(@"%@ %@ %@ %@", self.message.identifier, self.message.depiction, self.message.completeTime, self.message.evaluation);
     [HTTPDataFetcher setCookies];
     [HTTPDataFetcher fetchRepairReportCompleteMessages:^(id messages) {
         NSLog(@"%@", messages);
