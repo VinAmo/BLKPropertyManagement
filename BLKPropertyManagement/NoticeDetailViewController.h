@@ -6,6 +6,12 @@
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
+/**
+ *  @author V, 15-07-07 11:07:02
+ *
+ *  公告详情界面
+ */
+
 #import <UIKit/UIKit.h>
 
 @interface NoticeDetailViewController : UIViewController

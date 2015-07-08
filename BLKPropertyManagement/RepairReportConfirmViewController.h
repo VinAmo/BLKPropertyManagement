@@ -6,6 +6,17 @@
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
+/**
+ *  @author V, 15-07-07 11:07:34
+ *
+ *  报修申请，确认申请按钮触发事件
+ *
+ *  @param strong    <#strong description#>
+ *  @param nonatomic <#nonatomic description#>
+ *
+ *  @return <#return value description#>
+ */
+
 #import <UIKit/UIKit.h>
 #import "RepairReportMessage.h"
 

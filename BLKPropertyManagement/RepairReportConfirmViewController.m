@@ -18,7 +18,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    self.navigationItem.title = @"确认完成";
+    self.navigationItem.title = @"确认申请";
     
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.view = [[UIView alloc] init];

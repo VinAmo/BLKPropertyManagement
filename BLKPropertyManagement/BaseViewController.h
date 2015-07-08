@@ -24,6 +24,7 @@
 @property (copy, nonatomic) NSString *state;
 @property (copy, nonatomic) NSString *person;
 
+// 加载数据
 - (void)loadDataFilter;
 - (void)loadData; // required to implement in subclass
 

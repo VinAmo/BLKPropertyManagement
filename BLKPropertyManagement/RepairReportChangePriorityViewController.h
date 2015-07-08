@@ -6,6 +6,12 @@
 //  Copyright (c) 2015年 BLK. All rights reserved.
 //
 
+/**
+ *  @author V, 15-07-07 11:07:02
+ *
+ *  修改报修优先级，修改等级按钮触发事件
+ */
+
 #import <UIKit/UIKit.h>
 #import "RepairReportMessage.h"
 
